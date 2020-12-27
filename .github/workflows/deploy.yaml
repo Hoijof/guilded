@@ -24,7 +24,7 @@ jobs:
         CI: true
     - run: rm -rf docs
     - run: mkdir docs
-    - run: cp -r build/ docs
+    - run: cp -r build/* docs
     - run: |
         echo ${{ github.ref }}
         git add .
