@@ -22,12 +22,19 @@ jobs:
     - run: npm test
       env:
         CI: true
-    - run: rm -rf docs
-    - run: mkdir docs
-    - run: cp -r build/* docs
-    - run: |
-        echo ${{ github.ref }}
+    - name: Move stuff around
+        run: |
+          rm -rf docs
+          mkdir docs
+          cp -r build/* docs
+    - name: Commit files
+      run: |
         git add .
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git commit -m "CI: Automated build push" -a | exit 0
+        git commit -m "Add changes" -a
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: master
