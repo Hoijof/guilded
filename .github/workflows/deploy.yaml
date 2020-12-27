@@ -27,6 +27,7 @@ jobs:
         rm -rf docs
         mkdir docs
         cp -r build/* docs
+        find docs/index.html -type f -exec sed -i 's/\/static/static/g' {} \;
     - name: Commit files
       run: |
         git add .
