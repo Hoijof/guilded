@@ -17,7 +17,14 @@ function getRandomStats() {
   }
 }
 
-export default function createMember(name = getRandomName(), color = getRandomColor(), type = getRandomType(), stats = getRandomStats()) {
+function getInitialData() {
+  return {
+    missions: 0,
+    daysInGuild: 0,
+  }
+}
+
+export default function createMember(name = getRandomName(), color = getRandomColor(), type = getRandomType(), stats = getRandomStats(), data = getInitialData()) {
   return {
     id: id++,
     name,
@@ -29,7 +36,8 @@ export default function createMember(name = getRandomName(), color = getRandomCo
     type,
     task: null,
     stats,
-    computedStats: stats
+    computedStats: stats,
+    data
   } 
 }
 

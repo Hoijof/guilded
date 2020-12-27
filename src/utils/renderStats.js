@@ -28,3 +28,11 @@ export function sumStats(member) {
     return acc + stat;
   }, 0) - member.stats.health;
 }
+
+export function renderData(member) {
+  return Object.keys(member.data).map((statName) => {
+    const data = member.data[statName];
+
+    return <Typography.Text key={statName} >{statName}: {data}</Typography.Text>
+  });
+}

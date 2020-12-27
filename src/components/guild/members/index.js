@@ -2,7 +2,7 @@
 import { Card, Typography, Space, Collapse } from 'antd';
 
 
-import renderStats, {sumStats} from '../../../utils/renderStats';
+import renderStats, {sumStats, renderData} from '../../../utils/renderStats';
 import { cardStyle } from '../../../utils/styles';
 
 
@@ -25,6 +25,13 @@ export default function Members({dispatch, state}) {
                 <Panel header={`Stats (${sumStats(member)})`} key="1">
                   <Space style={{width: '100%'}} direction="vertical">
                     {renderStats(member)}
+                  </Space>
+                </Panel>
+              </Collapse>
+              <Collapse ghost style={{marginLeft: -15}}>
+                <Panel header="Data" key="2">
+                  <Space style={{width: '100%'}} direction="vertical">
+                    {renderData(member)}
                   </Space>
                 </Panel>
               </Collapse>
