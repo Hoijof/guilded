@@ -23,10 +23,10 @@ jobs:
       env:
         CI: true
     - name: Move stuff around
-        run: |
-          rm -rf docs
-          mkdir docs
-          cp -r build/* docs
+      run: |
+        rm -rf docs
+        mkdir docs
+        cp -r build/* docs
     - name: Commit files
       run: |
         git add .
