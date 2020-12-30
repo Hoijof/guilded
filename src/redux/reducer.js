@@ -1,23 +1,46 @@
 
 export default function reducer(state, action) {
-  console.log(action);
-  switch (action.type) {
+  const computedAction = typeof action === 'string' ? { type: action} : action;
+
+  if (!['increaseStageProgress', 'resetStageProgress'].includes(computedAction.type))
+  console.log(computedAction);
+  switch (computedAction.type) {
       case 'changeSelectedMenu':
           return {
             ...state,
-            selectedItem: action.payload
+            selectedItem: computedAction.payload
           }
+      case 'increaseStageProgress': 
+          return {
+            ...state,
+            stageProgress: state.stageProgress + state.stageSpeed
+          };
+      case 'resetStageProgress': 
+          return {
+            ...state,
+            stageProgress: 0
+          };
+      case 'switchPause':
+          return {
+            ...state,
+            isPaused: !state.isPaused
+          }
+      case 'changeStageSpeed':
+        return {
+          ...state,
+          stageSpeed: state.stageSpeed + computedAction.payload
+        }
       default:
   }
 
   // Guild
-  switch (action.type) {
+  switch (computedAction.type) {
     case 'changeSelectedGuildMenu': 
       return {
         ...state,
         guild: {
           ...state.guild,
-          selectedItem: action.payload
+          selectedItem: computedAction.payload
         }
       }
     case 'askFounding':
@@ -39,7 +62,7 @@ export default function reducer(state, action) {
           stats: {
             ...state.guild.stats,
             members: cloneMembers(state.guild.stats.members, (member) => {
-              if (member.id === action.payload.id) {
+              if (member.id === computedAction.payload.id) {
                 member.gold += 5;
               }
             }),
@@ -54,26 +77,26 @@ export default function reducer(state, action) {
           ...state.guild,
           stats: {
             ...state.guild.stats,
-            members: [...state.guild.stats.members, action.payload],
-            gold: state.guild.stats.gold - (action.payload.level * 5)
+            members: [...state.guild.stats.members, computedAction.payload],
+            gold: state.guild.stats.gold - (computedAction.payload.level * 5)
           }
         },
         tavern: {
           ...state.tavern,
-          recruits: state.tavern.recruits.filter((recruit) => recruit.id !== action.payload.id)
+          recruits: state.tavern.recruits.filter((recruit) => recruit.id !== computedAction.payload.id)
         }
       }
     default:
   }
 
   // City
-  switch (action.type) {
+  switch (computedAction.type) {
     case 'changeSelectedCityMenu': 
       return {
         ...state,
         city: {
           ...state.city,
-          selectedItem: action.payload
+          selectedItem: computedAction.payload
         }
       }
     default:

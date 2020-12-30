@@ -1,0 +1,1 @@
+export const STAGE_SPEED = 5;
