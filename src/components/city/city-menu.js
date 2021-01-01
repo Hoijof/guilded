@@ -9,7 +9,7 @@ export default function cityMenu({dispatch}) {
   }
   
   return (
-  <Menu onSelect={changeMenuItem} theme="light" mode="inline" defaultSelectedKeys={["Overview"]}>
+  <Menu class="CityMenu" onSelect={changeMenuItem} theme="light" mode="inline" defaultSelectedKeys={["Overview"]}>
     <Menu.Item key="Overview">Overview</Menu.Item>
     <Menu.Item key="Guild">Guild</Menu.Item>
     <Menu.Item key="Market">Market</Menu.Item>

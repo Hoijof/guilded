@@ -46,7 +46,7 @@ export default function World() {
     <>
       {contextHolder}
       {renderContent(dispatch, state)}
-      <div style={{position: 'absolute', left: 0, bottom: 0, width: '100%'}}>
+      <div id="TickerBar" style={{position: 'absolute', left: 0, bottom: 0, width: '100%'}}>
         <div> Day: {state.ticker.day}</div>
         <div>Time of The Day: {state.ticker.currentStage}</div>
         <div>Ticks: {state.ticker.stats.ticks}</div>
