@@ -2,6 +2,8 @@
 // https://github.com/kolodny/immutability-helper
 import update from 'immutability-helper';
 
+import { STATE_PROGRESS_INCREMENT } from '../utils/consts';
+
 export default function reducer(state, action) {
   const computedAction = typeof action === 'string' ? { type: action} : action;
 
@@ -12,18 +14,10 @@ export default function reducer(state, action) {
         return update(state, {
           selectedItem: {$set: computedAction.payload}
         });
-          // return {
-          //   ...state,
-          //   selectedItem: computedAction.payload
-          // }
       case 'increaseStageProgress': 
         return update(state, {
-          stageProgress: {$set: state.stageProgress + state.stageSpeed}
+          stageProgress: {$set: state.stageProgress + STATE_PROGRESS_INCREMENT}
         });
-          // return {
-          //   ...state,
-          //   stageProgress: state.stageProgress + state.stageSpeed
-          // };
       case 'resetStageProgress': 
           return {
             ...state,

@@ -8,7 +8,7 @@ import reducer from '../redux/reducer';
 import City from './city';
 import createMember from '../utils/createMember';
 
-import { STAGE_SPEED } from '../utils/consts';
+import { INIT_STAGE_SPEED } from '../utils/consts';
 
 export default function World() {
   const [api, contextHolder] = notification.useNotification();
@@ -31,7 +31,7 @@ export default function World() {
     },
     selectedCity: 'City',
     day: 0,
-    stageSpeed: STAGE_SPEED,
+    stageSpeed: INIT_STAGE_SPEED,
     stageProgress: 0,
     isPaused: false,
     notify: api,
@@ -39,17 +39,8 @@ export default function World() {
   });
 
   useInterval(() => {
-    if (state.isPaused) {
-      return;
-    }
-
-    if (state.stageProgress < 100) {
-      return dispatch({ type: 'increaseStageProgress'});
-    }
-
-    state.ticker.advanceStage(state);
-    return dispatch({ type: 'resetStageProgress'});
-  }, 100)
+    state.ticker.tick(dispatch, state);
+  }, state.stageSpeed)
 
   return (
     <>
@@ -58,11 +49,12 @@ export default function World() {
       <div style={{position: 'absolute', left: 0, bottom: 0, width: '100%'}}>
         <div> Day: {state.ticker.day}</div>
         <div>Time of The Day: {state.ticker.currentStage}</div>
+        <div>Ticks: {state.ticker.stats.ticks}</div>
         <Button onClick={() => {dispatch('switchPause')}}>{state.isPaused ? 'Resume' : 'Pause'}</Button>
         <br />
-        <Button onClick={() => {dispatch({type: 'changeStageSpeed', payload: -1})}}>-</Button>
+        <Button onClick={() => {dispatch({type: 'changeStageSpeed', payload: 10})}}>-</Button>
         <span> Speed: {state.stageSpeed} </span>
-        <Button onClick={() => {dispatch({type: 'changeStageSpeed', payload: 1})}}>+</Button>
+        <Button onClick={() => {dispatch({type: 'changeStageSpeed', payload: -10})}}>+</Button>
         <Progress percent={state.stageProgress} showInfo={false} size="small" />
       </div>
     </>
