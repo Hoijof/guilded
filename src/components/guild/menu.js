@@ -1,6 +1,6 @@
 import { Menu } from 'antd';
 
-export default function GuildMenu({dispatch}) {
+export default function GuildMenu({dispatch, defaultItem}) {
   function changeMenuItem({ key }) {
     dispatch({
       type: 'changeSelectedGuildMenu',
@@ -9,7 +9,7 @@ export default function GuildMenu({dispatch}) {
   }
   
   return (
-  <Menu onSelect={changeMenuItem} theme="light" mode="horizontal" defaultSelectedKeys={["Overview"]} >
+  <Menu onSelect={changeMenuItem} theme="light" mode="horizontal" defaultSelectedKeys={[defaultItem]} >
     <Menu.Item key="Overview">Overview</Menu.Item>
     <Menu.Item key="Members">Members</Menu.Item>
   </Menu>

@@ -1,1 +1,2 @@
-export const STAGE_SPEED = 5;
+export const INIT_STAGE_SPEED = 100;
+export const STATE_PROGRESS_INCREMENT = 10;
