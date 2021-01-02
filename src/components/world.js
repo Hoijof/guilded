@@ -1,5 +1,6 @@
 import React, { useReducer } from "react";
 import { notification, Progress, Button } from 'antd';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 import ticker from '../utils/ticker';
 import useInterval from '../utils/useInterval';
@@ -42,6 +43,21 @@ export default function World() {
     state.ticker.tick(dispatch, state);
   }, state.stageSpeed)
 
+  useHotkeys('space', () => dispatch('switchPause')) 
+  
+  useHotkeys('+', { splitKey: '-' }, function(e){
+    console.log('you pressed +');
+  })
+  useHotkeys("*", event => {
+    if (event.key === "+") {
+      dispatch({type: 'changeStageSpeed', payload: -25})
+    }
+
+    if (event.key === "-") {
+      dispatch({type: 'changeStageSpeed', payload: 25})
+    }
+  })
+  
   return (
     <>
       {contextHolder}
