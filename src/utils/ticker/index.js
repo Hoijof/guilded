@@ -1,4 +1,5 @@
 import { getTicker } from '../../redux/selectors';
+import { MONTH_LENGTH } from '../../utils/consts';
 
 let ticker;
 
@@ -7,6 +8,8 @@ function initialize() {
     currentStage: TimeOfTheDay.MORNING,
     hour: 0,
     day: 1,
+    month: 0,
+    year: 475,
     todayEvents: computeDayEvents({}),
     activeEvents: [],
     stats: {
@@ -38,7 +41,28 @@ function callADay(dispatch, state) {
   ticker.hour = 0;
   ticker.day++;
 
-  dispatch('switchPause', true);
+
+  if (ticker.day > MONTH_LENGTH) {
+    callAMonth(dispatch, state);
+  }  
+}
+
+function callAMonth(dispatch, state) {
+  const ticker = getTicker(state);
+
+  ticker.day = 1;
+  ticker.month++;
+
+  if (ticker.month === 4) {
+    callAYear(dispatch, state);
+  }
+}
+
+function callAYear(dispatch, state) {
+  const ticker = getTicker(state);
+
+  ticker.month = 0;
+  ticker.year++;
 }
 
 function computeDayEvents(state) {
@@ -55,16 +79,18 @@ function tick(dispatch, state) {
     return;
   }
 
-  if (state.stageProgress === 6) {
-    state.ticker.advanceStage(dispatch, state);
-  
-    dispatch('resetStageProgress');
-  }
-  
   getTicker(state).stats.ticks++;
   getTicker(state).hour++;
 
-  return dispatch('increaseStageProgress');  
+  dispatch('increaseStageProgress'); 
+
+  if (state.stageProgress === 5) {
+    state.ticker.advanceStage(dispatch, state);
+  
+    return dispatch('resetStageProgress');
+  }
+  
+   
 }
 
 export const TimeOfTheDay = {
@@ -88,3 +114,10 @@ function getNextTime(currentStage) {
       return TimeOfTheDay.NIGHT;
   }
 }
+
+export const MONTHS = [
+  'Decembary',
+  'Aprimay',
+  'Jugust',
+  'Septober'
+];
