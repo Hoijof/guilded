@@ -19,109 +19,78 @@ export default function reducer(state, action) {
           stageProgress: {$set: state.stageProgress + STATE_PROGRESS_INCREMENT}
         });
       case 'resetStageProgress': 
-          return {
-            ...state,
-            stageProgress: 0
-          };
+        return update(state, {
+          stageProgress: {$set: 0}
+        });
       case 'switchPause':
-          return {
-            ...state,
-            isPaused: !state.isPaused
-          }
+        return update(state, {
+          isPaused: {$set: !state.isPaused}
+        });
       case 'changeStageSpeed':
-        return {
-          ...state,
-          stageSpeed: state.stageSpeed + computedAction.payload
-        }
+        return update(state, {
+          stageSpeed: {$set: state.stageSpeed + computedAction.payload}
+        }); 
       default:
   }
 
   // Guild
   switch (computedAction.type) {
     case 'changeSelectedGuildMenu': 
-      return {
-        ...state,
+      return update(state, {
         guild: {
-          ...state.guild,
-          selectedItem: computedAction.payload
+          selectedItem: { $set: computedAction.payload}
         }
-      }
+      });
     case 'askFounding':
-      return {
-        ...state,
+      return update(state, {
         guild: {
-          ...state.guild,
           stats: {
-            ...state.guild.stats,
-            gold: 25
+            gold: { $set: 25 }
           }
         }
-      };
+      });
     case 'addGoldToMember':
-      return {
-        ...state,
+      var memberIndex = state.guild.stats.members.indexOf(computedAction.payload);
+      var updatedMember = update(computedAction.payload, { gold: { $set: computedAction.payload.gold + 5}});
+
+      return update(state, {
         guild: {
-          ...state.guild,
           stats: {
-            ...state.guild.stats,
-            members: cloneMembers(state.guild.stats.members, (member) => {
-              if (member.id === computedAction.payload.id) {
-                member.gold += 5;
-              }
-            }),
-            gold: state.guild.stats.gold - 5
+            members: {
+              $splice: [[memberIndex, 1, updatedMember]]
+            },
+            gold: { $set: state.guild.stats.gold - 5}
           }
         }
-      }
-    case 'hireGuildMember':       
-      return {
-        ...state,
+      });
+    case 'hireGuildMember':   
+      return update(state, {
         guild: {
-          ...state.guild,
           stats: {
-            ...state.guild.stats,
-            members: [...state.guild.stats.members, computedAction.payload],
-            gold: state.guild.stats.gold - (computedAction.payload.level * 5)
+            members: { $push: [computedAction.payload] },
+            gold: { $set: state.guild.stats.gold - (computedAction.payload.level * 5) }
           }
         },
         tavern: {
-          ...state.tavern,
-          recruits: state.tavern.recruits.filter((recruit) => recruit.id !== computedAction.payload.id)
+          recruits: { $splice: [[state.tavern.recruits.indexOf(computedAction.payload), 1]]}
         }
-      }
+      });   
     default:
   }
 
   // City
   switch (computedAction.type) {
     case 'changeSelectedCityMenu': 
-      return {
-        ...state,
+      return update(state, {
         city: {
-          ...state.city,
-          selectedItem: computedAction.payload
+          selectedItem: { $set: computedAction.payload}
         }
-      }
+      });
     default:
   }
 
   console.log("returning Default");
   return state;
-}
-
-
-function cloneMembers(members, cb) {
-  return members.map((member) => {
-    const newMember = {
-      ...member,
-      stats: {...member.stats},
-      computedStats: {...member.computedStats}
-    };
-
-    cb(newMember);
-
-    return newMember;
-  })
 }
 
 

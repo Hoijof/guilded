@@ -1,5 +1,5 @@
 context('World', () => {
-  const menuClassName = '.ant-menu.ant-menu-light.ant-menu-root.ant-menu-inline';
+  const menuClassName = '.CityMenu';
 
   beforeEach(() => {
     cy.visit('/')
