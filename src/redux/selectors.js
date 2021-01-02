@@ -5,3 +5,7 @@ export function getTicker(state) {
 export function getGuildDefaultMenu(state) {
   return state.guild.selectedItem;
 }
+
+export function getActiveEvents(state) {
+  return getTicker(state).activeEvents;
+}
