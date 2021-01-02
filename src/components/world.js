@@ -48,8 +48,8 @@ export default function World() {
       {renderContent(dispatch, state)}
       <div id="TickerBar" style={{position: 'absolute', left: 0, bottom: 0, width: '100%'}}>
         <div> Day: {state.ticker.day}</div>
+        <div>Hour: {state.ticker.hour}:00</div>
         <div>Time of The Day: {state.ticker.currentStage}</div>
-        <div>Ticks: {state.ticker.stats.ticks}</div>
         <Button onClick={() => {dispatch('switchPause')}}>{state.isPaused ? 'Resume' : 'Pause'}</Button>
         <br />
         <Button onClick={() => {dispatch({type: 'changeStageSpeed', payload: 10})}}>-</Button>

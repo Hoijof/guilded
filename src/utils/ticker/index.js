@@ -5,6 +5,7 @@ let ticker;
 function initialize() {
   ticker = {
     currentStage: TimeOfTheDay.MORNING,
+    hour: 0,
     day: 1,
     todayEvents: computeDayEvents({}),
     activeEvents: [],
@@ -34,6 +35,7 @@ function callADay(dispatch, state) {
   const ticker = getTicker(state);
 
   ticker.currentStage = TimeOfTheDay.MORNING;
+  ticker.hour = 0;
   ticker.day++;
 
   dispatch('switchPause', true);
@@ -52,16 +54,17 @@ function tick(dispatch, state) {
   if (state.isPaused) {
     return;
   }
-  getTicker(state).stats.ticks++;
 
-  if (state.stageProgress < 100) {
-    return dispatch('increaseStageProgress');
-  }
-
-
-  state.ticker.advanceStage(dispatch, state);
+  if (state.stageProgress === 6) {
+    state.ticker.advanceStage(dispatch, state);
   
-  return dispatch('resetStageProgress');
+    dispatch('resetStageProgress');
+  }
+  
+  getTicker(state).stats.ticks++;
+  getTicker(state).hour++;
+
+  return dispatch('increaseStageProgress');  
 }
 
 export const TimeOfTheDay = {
