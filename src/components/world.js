@@ -2,7 +2,7 @@ import React, { useReducer } from "react";
 import { notification, Progress, Button } from 'antd';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-import ticker from '../utils/ticker';
+import ticker, { MONTHS } from '../utils/ticker';
 import useInterval from '../utils/useInterval';
 
 import reducer from '../redux/reducer';
@@ -57,13 +57,13 @@ export default function World() {
       dispatch({type: 'changeStageSpeed', payload: 25})
     }
   })
-  
+
   return (
     <>
       {contextHolder}
       {renderContent(dispatch, state)}
       <div id="TickerBar" style={{position: 'absolute', left: 0, bottom: 0, width: '100%'}}>
-        <div> Day: {state.ticker.day}</div>
+        <div>{state.ticker.day} / {MONTHS[state.ticker.month]} / {state.ticker.year}</div>
         <div>Hour: {state.ticker.hour}:00</div>
         <div>Time of The Day: {state.ticker.currentStage}</div>
         <Button onClick={() => {dispatch('switchPause')}}>{state.isPaused ? 'Resume' : 'Pause'}</Button>
