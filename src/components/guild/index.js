@@ -4,6 +4,8 @@ import GuildMenu from './menu';
 import Overview from './overview';
 import Members from './members';
 
+import {getGuildDefaultMenu} from '../../redux/selectors';
+
 const { Header, Content } = Layout;
 
 function renderContent(dispatch, state) {
@@ -21,7 +23,6 @@ function renderContent(dispatch, state) {
 }
 
 export default function Guild({dispatch, state}) {
-  
   return (
     <Layout style={{ background: 'white'}}>
       <Header
@@ -31,7 +32,7 @@ export default function Guild({dispatch, state}) {
           padding: 0
         }}
       >
-        <GuildMenu dispatch={dispatch} />
+        <GuildMenu dispatch={dispatch} defaultItem={getGuildDefaultMenu(state)} />
       </Header>
       <Content style={{ background: 'white', padding: 10, margin: "24px 16px 0", overflow: "initial"}}>
           {renderContent(dispatch, state)}
