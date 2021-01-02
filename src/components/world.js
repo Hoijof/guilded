@@ -66,7 +66,7 @@ export default function World() {
       dispatch({type: 'changeStageSpeed', payload: 25})
     }
   })
-console.log(state.ticker.month)
+
   return (
     <>
       {contextHolder}
