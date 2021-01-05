@@ -11,7 +11,7 @@ export default function Tavern({ dispatch, state }) {
   return (
     <>
       <Text>Welcome to the Tavern, please take a seat!</Text>
-      <Collapse ghost style={{marginLeft: -15}} defaultActiveKey={['1']}>
+      <Collapse ghost style={{marginLeft: -15}} defaultActiveKey={['2']}>
         <Panel header="Recruits" key="1">
           <Title level={4}>Available Recruits</Title>
           
@@ -49,6 +49,13 @@ export default function Tavern({ dispatch, state }) {
                 <Text>name: {quest.name}</Text>
                 <Text>description: {quest.description}</Text>
                 <Text>reward: {quest.reward}</Text>
+                <Collapse ghost style={{marginLeft: -15}}>
+                    <Panel header={`Quest Log ${quest.log.length}`} key="1">
+                      <Space style={{width: '100%'}} direction="vertical">
+                        {quest.log.map(log => (<div key={log}>{log}</div>))}
+                      </Space>
+                    </Panel>
+                  </Collapse>
                 <Button type="primary" onClick={() => {
                   dispatch({type: 'startQuest', payload: quest})
                 

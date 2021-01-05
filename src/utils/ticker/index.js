@@ -82,7 +82,7 @@ function isToday(ticker, date) {
 }
 
 export function getTimeInFuture(startTime, difference) {
-  return []
+  return getTimeFromHours(getTotalHours(startTime) + difference);
 }
 
 export function getCurrentTime(ticker) {
@@ -107,7 +107,7 @@ export function getTotalHours(time) {
 }
 
 export function getTimeFromHours(hours) {
-  return [Math.floor(hours / 1440), Math.floor((5261 / 360) % 4), Math.floor((5261 / 24) % 15) + 1, 5261 % 24];
+  return [Math.floor(hours / 1440), Math.floor((hours / 360) % 4), Math.floor((hours / 24) % 15) + 1, hours % 24];
 }
 
 export function rescheduleEvent(event, startDate, endDate) {
@@ -174,7 +174,7 @@ function tick(dispatch, state) {
   if (state.stageProgress === 5) {
     state.ticker.advanceStage(dispatch, state);
   
-    return dispatch('resetStageProgress');
+    dispatch('resetStageProgress');
   }   
 
   checkEvents(dispatch, state);
