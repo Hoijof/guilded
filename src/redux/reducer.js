@@ -2,6 +2,7 @@
 // https://github.com/kolodny/immutability-helper
 import update from 'immutability-helper';
 
+import { startQuest, advanceQuest } from '../utils/quest';
 import { STATE_PROGRESS_INCREMENT } from '../utils/consts';
 
 export default function reducer(state, action) {
@@ -85,6 +86,31 @@ export default function reducer(state, action) {
         city: {
           selectedItem: { $set: computedAction.payload}
         }
+      });
+    default:
+  }
+
+  // Quests
+  switch (computedAction.type) {
+    case 'addQuest':
+      return update(state, {
+        quests: { quests: {$push: computedAction.payload } }
+      });
+    case 'removeQuest': 
+      return update(state, {
+        quests: {quests: { $splice: [[state.quests.quests.indexOf(computedAction.payload), 1]] }}
+      });
+    case 'startQuest': 
+      startQuest(state, computedAction.payload);
+
+      return  update(state, {
+        quests: {quests: { $splice: [[state.quests.quests.indexOf(computedAction.payload), 1, computedAction.payload]] }}
+      });
+    case 'advanceQuest': 
+      advanceQuest(state, computedAction.payload);
+      
+      return update(state, {
+        quests: {quests: { $splice: [[state.quests.quests.indexOf(computedAction.payload), 1, computedAction.payload]] }}
       });
     default:
   }

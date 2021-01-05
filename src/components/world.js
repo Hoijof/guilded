@@ -8,6 +8,7 @@ import useInterval from '../utils/useInterval';
 import reducer from '../redux/reducer';
 import City from './city';
 import createMember from '../utils/createMember';
+import createQuest from '../utils/quest';
 
 import { INIT_STAGE_SPEED } from '../utils/consts';
 
@@ -28,7 +29,15 @@ export default function World() {
       selectedItem: 'Overview',
     },
     tavern: {
-      recruits: [1,2,3,4,5,6,7,8,9,10].map(() => createMember())
+      recruits: [1,2,3,4].map(() => createMember())
+    },
+    quests: {
+      quests: [createQuest(),createQuest(),createQuest(),createQuest(),createQuest()],
+      stats: {
+        questsCreated: 0,
+        questStarted: 0,
+        questsCompleted: 0
+      }
     },
     selectedCity: 'City',
     day: 0,
