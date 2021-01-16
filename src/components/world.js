@@ -2,8 +2,9 @@ import React, { useReducer } from "react";
 import { notification, Progress, Button } from 'antd';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-import ticker, { MONTHS } from '../utils/ticker';
+import ticker from '../utils/ticker';
 import useInterval from '../utils/useInterval';
+import { MONTHS } from '../utils/consts';
 
 import reducer from '../redux/reducer';
 import City from './city';
@@ -11,6 +12,8 @@ import createMember from '../utils/createMember';
 import createQuest from '../utils/quest';
 
 import { INIT_STAGE_SPEED } from '../utils/consts';
+
+export const AppContext = React.createContext();
 
 export default function World() {
   const [api, contextHolder] = notification.useNotification();
@@ -29,6 +32,7 @@ export default function World() {
       selectedItem: 'Overview',
     },
     tavern: {
+      selectedItem: 'Overview',
       recruits: [1,2,3,4].map(() => createMember())
     },
     quests: {
@@ -52,6 +56,7 @@ export default function World() {
     state.ticker.tick(dispatch, state);
   }, state.stageSpeed)
 
+  // #region Hotkeys
   useHotkeys('space', () => dispatch('switchPause')) 
   
   useHotkeys('+', { splitKey: '-' }, function(e){
@@ -66,11 +71,12 @@ export default function World() {
       dispatch({type: 'changeStageSpeed', payload: 25})
     }
   })
+  //#endregion
 
   return (
-    <>
+    <AppContext.Provider value={{ state, dispatch }}>
       {contextHolder}
-      {renderContent(dispatch, state)}
+      {renderContent(state)}
       <div id="TickerBar" style={{position: 'absolute', left: 0, bottom: 0, width: '100%'}}>
         <div>{state.ticker.day} / {MONTHS[state.ticker.month]} / {state.ticker.year}</div>
         <div>Hour: {state.ticker.hour}:00</div>
@@ -80,16 +86,15 @@ export default function World() {
         <Button onClick={() => {dispatch({type: 'changeStageSpeed', payload: 10})}}>-</Button>
         <span> Speed: {state.stageSpeed} </span>
         <Button onClick={() => {dispatch({type: 'changeStageSpeed', payload: -10})}}>+</Button>
-        <Progress percent={state.stageProgress} showInfo={false} size="small" />
       </div>
-    </>
+    </AppContext.Provider>
   )
 }
 
-function renderContent(dispatch, state) {
+function renderContent(state) {
   switch(state.selectedCity) {
     case 'City': 
-      return <City dispatch={dispatch} state={state} />
+      return <City />
 
     default:
       return "No city to render";

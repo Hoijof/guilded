@@ -1,3 +1,6 @@
+import React, { useContext } from 'react';
+import { AppContext } from '../world';
+
 import { Layout } from "antd";
 
 import CityMenu from './city-menu';
@@ -9,8 +12,8 @@ import Tavern from '../tavern';
 const { Sider, Content } = Layout;
 
 
-export default function City({dispatch, state}) {
-  const city = state.city;
+export default function City() {
+  const { state, dispatch } = useContext(AppContext);
 
   return (
     <Layout>
@@ -23,7 +26,7 @@ export default function City({dispatch, state}) {
           left: 0,
         }}
       >
-        <CityMenu dispatch={dispatch} />
+        <CityMenu />
       </Sider>
       <Layout style={{ marginLeft: 200, height: "100vh" }}>
         <Content style={{ background: 'white', padding: 10, margin: "24px 16px 0", overflow: "initial"}}>
@@ -38,15 +41,15 @@ export default function City({dispatch, state}) {
 function renderContent(dispatch, state) {
   switch(state.city.selectedItem) {
     case 'Overview': 
-      return <Overview dispatch={dispatch} state={state} />
+      return <Overview />
     case 'Guild':
-      return <Guild dispatch={dispatch} state={state} />
+      return <Guild />
     case 'Market': 
-      return <Market dispatch={dispatch} state={state} />
+      return <Market />
     case 'Tavern': 
-      return <Tavern dispatch={dispatch} state={state} />
+      return <Tavern />
 
     default:
-      return "No content";
+      return "No content for City";
   }
 }

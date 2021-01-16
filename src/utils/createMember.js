@@ -1,5 +1,5 @@
-import getRandomName from './getRandomName';
-import {getRandomInt, getRandomColor} from './random';
+import { SEXES } from './consts';
+import {getRandomInt, getRandomColor, getRandomName, getRandomSurname} from './random';
 
 let id = 0;
 
@@ -24,10 +24,16 @@ function getInitialData() {
   }
 }
 
-export default function createMember(name = getRandomName(), color = getRandomColor(), type = getRandomType(), stats = getRandomStats(), data = getInitialData()) {
+export default function createMember(
+  name, sex = SEXES[getRandomInt(0,1)], surname = getRandomSurname(), 
+  color = getRandomColor(), type = getRandomType(), stats = getRandomStats(),
+  data = getInitialData()) {
+
   return {
     id: id++,
-    name,
+    sex,
+    name: name ? name :  getRandomName(sex),
+    surname,
     color,
     items: [],
     gold: 0,

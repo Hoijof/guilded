@@ -34,14 +34,21 @@ export default function reducer(state, action) {
       default:
   }
 
-  // Guild
+  // #region Menus
   switch (computedAction.type) {
-    case 'changeSelectedGuildMenu': 
+    case 'changeSelectedContentMenu': 
       return update(state, {
-        guild: {
-          selectedItem: { $set: computedAction.payload}
+        [computedAction.payload.stateNamespace]: {
+          selectedItem: { $set: computedAction.payload.key}
         }
       });
+    default:
+  }
+
+  //#endregion
+
+  // Guild
+  switch (computedAction.type) {
     case 'askFounding':
       return update(state, {
         guild: {
