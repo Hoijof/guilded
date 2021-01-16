@@ -1,13 +1,15 @@
 import { getTicker } from '../../redux/selectors';
-import { MONTH_LENGTH } from '../../utils/consts';
+import { isToday, getNextTime } from './tickerUtils';
+import { createEvent, rescheduleEvent } from '../event';
 
-import createEvent, { EVENT_TYPES } from '../event';
+import { MONTH_LENGTH, TIME_OF_THE_DAY, EVENT_TYPES } from '../../utils/consts';
+
 
 let ticker;
 
 function initialize(state) {
   ticker = {
-    currentStage: TimeOfTheDay.MORNING,
+    currentStage: TIME_OF_THE_DAY.MORNING,
     hour: 0,
     day: 1,
     month: 0,
@@ -77,49 +79,32 @@ function checkEvents(dispatch, state) {
   });
 }
 
-function isToday(ticker, date) {
-  return ticker.year === date[0] && ticker.month === date[1] && ticker.day === date[2];
-}
-
-export function getTimeInFuture(startTime, difference) {
-  return getTimeFromHours(getTotalHours(startTime) + difference);
-}
-
-export function getCurrentTime(ticker) {
-  return [ticker.year, ticker.month, ticker.day, ticker.hour];
-}
-
-export function getHumanTime(time) {
-  
-}
-
-export function getDifferenceTime(startTime, endTime) {
-  const difference = getTotalHours(endTime) - getTotalHours(startTime);
-
-  return getTimeFromHours(difference);
-}
-
-/*
-  year: 4 * 15 * 24 = 1440
-*/
-export function getTotalHours(time) {
-  return time[0] * 1440 + time[1] * 360 + (time[2] - 1) * 24 + time[3];
-}
-
-export function getTimeFromHours(hours) {
-  return [Math.floor(hours / 1440), Math.floor((hours / 360) % 4), Math.floor((hours / 24) % 15) + 1, hours % 24];
-}
-
-export function rescheduleEvent(event, startDate, endDate) {
-  return createEvent(startDate, endDate, event.name, event.description, event.type, event.startHandler, event.endHandler);
-}
 
 //#region Ticking
+
+function tick(dispatch, state) {
+  if (state.isPaused) {
+    return;
+  }
+
+  getTicker(state).stats.ticks++;
+  getTicker(state).hour++;
+
+  dispatch('increaseStageProgress'); 
+
+  if (state.stageProgress === 5) {
+    state.ticker.advanceStage(dispatch, state);
+  
+    dispatch('resetStageProgress');
+  }   
+
+  checkEvents(dispatch, state);
+}
 
 function advanceStage(dispatch, state) {
   const ticker = getTicker(state);
 
-  if (ticker.currentStage === TimeOfTheDay.NIGHT) {
+  if (ticker.currentStage === TIME_OF_THE_DAY.NIGHT) {
     return callADay(dispatch, state);    
   }
 
@@ -129,7 +114,7 @@ function advanceStage(dispatch, state) {
 function callADay(dispatch, state) {
   const ticker = getTicker(state);
 
-  ticker.currentStage = TimeOfTheDay.MORNING;
+  ticker.currentStage = TIME_OF_THE_DAY.MORNING;
   ticker.hour = 0;
   ticker.day++;
 
@@ -160,51 +145,6 @@ function callAYear(dispatch, state) {
   ticker.month = 0;
   ticker.year++;
 }
-
-function tick(dispatch, state) {
-  if (state.isPaused) {
-    return;
-  }
-
-  getTicker(state).stats.ticks++;
-  getTicker(state).hour++;
-
-  dispatch('increaseStageProgress'); 
-
-  if (state.stageProgress === 5) {
-    state.ticker.advanceStage(dispatch, state);
-  
-    dispatch('resetStageProgress');
-  }   
-
-  checkEvents(dispatch, state);
-}
-
-export const TimeOfTheDay = {
-  MORNING: 'Morning',
-  AFTERNOON: 'Afternoon',
-  EVENING: 'Evening',
-  NIGHT: 'Night'
-};
-
-function getNextTime(currentStage) {
-  switch(currentStage) {
-    case TimeOfTheDay.MORNING:
-      return TimeOfTheDay.AFTERNOON;
-    case TimeOfTheDay.AFTERNOON:
-      return TimeOfTheDay.EVENING;
-    case TimeOfTheDay.EVENING:
-      return TimeOfTheDay.NIGHT;
-  }
-}
-
-export const MONTHS = [
-  'Decembary',
-  'Aprimay',
-  'Jugust',
-  'Septober'
-];
-//#endregion
 
 export default {
   initialize

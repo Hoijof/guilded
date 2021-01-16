@@ -2,8 +2,9 @@ import React, { useReducer } from "react";
 import { notification, Progress, Button } from 'antd';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-import ticker, { MONTHS } from '../utils/ticker';
+import ticker from '../utils/ticker';
 import useInterval from '../utils/useInterval';
+import { MONTHS } from '../utils/consts';
 
 import reducer from '../redux/reducer';
 import City from './city';
@@ -80,7 +81,6 @@ export default function World() {
         <Button onClick={() => {dispatch({type: 'changeStageSpeed', payload: 10})}}>-</Button>
         <span> Speed: {state.stageSpeed} </span>
         <Button onClick={() => {dispatch({type: 'changeStageSpeed', payload: -10})}}>+</Button>
-        <Progress percent={state.stageProgress} showInfo={false} size="small" />
       </div>
     </>
   )

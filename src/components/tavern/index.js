@@ -20,7 +20,7 @@ export default function Tavern({ dispatch, state }) {
             const canHire = state.guild.stats.gold >= cost;
 
             return (
-              <Card key={key} style={cardStyle} title={member.name} extra={<div style={{width: 15, height: 15, background: member.color}}></div>}>
+              <Card key={key} style={cardStyle} title={`${member.name} ${member.surname}`} extra={<div style={{width: 15, height: 15, background: member.color}}></div>}>
                 <Space style={{width: '100%'}} direction="vertical">
                   <Text>Level: {member.level} ({member.exp} / {member.level * 2}) {member.exp > member.level * 2 ? '▲' : null}</Text>
                   <Text>Type: {member.type}</Text>

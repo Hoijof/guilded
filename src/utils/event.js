@@ -1,4 +1,4 @@
-export default function createEvent(start, end, name, description, type, startHandler, endHandler) {
+export function createEvent(start, end, name, description, type, startHandler, endHandler) {
   return {
     start,
     end,
@@ -10,7 +10,11 @@ export default function createEvent(start, end, name, description, type, startHa
   };
 }
 
-export const EVENT_TYPES = {
-  QUEST: 'QUEST',
-  EVENT: 'EVENT'
+export function rescheduleEvent(event, startDate, endDate) {
+  return createEvent(startDate, endDate, event.name, event.description, event.type, event.startHandler, event.endHandler);
+}
+
+export default {
+  createEvent,
+  rescheduleEvent
 };
