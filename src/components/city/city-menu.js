@@ -1,6 +1,10 @@
+import React, { useContext } from 'react';
+import { AppContext } from '../world';
 import { Menu } from 'antd';
 
-export default function cityMenu({dispatch}) {
+export default function cityMenu() {
+  const { dispatch } = useContext(AppContext);
+
   function changeMenuItem({ key }) {
     dispatch({
       type: 'changeSelectedCityMenu',

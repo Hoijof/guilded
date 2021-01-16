@@ -1,15 +1,18 @@
 
+import React, { useContext } from 'react';
+import { AppContext } from '../world';
 import { Card, Typography, Space, Collapse } from 'antd';
 
 
-import renderStats, {sumStats, renderData} from '../../../utils/renderStats';
-import { cardStyle } from '../../../utils/styles';
+import renderStats, {sumStats, renderData} from '../../utils/renderStats';
+import { cardStyle } from '../../utils/styles';
 
 
 const { Text } = Typography;
 const { Panel } = Collapse;
 
-export default function Members({dispatch, state}) {
+export default function Members() {
+  const { state, dispatch } = useContext(AppContext);
 
   return (
     <>

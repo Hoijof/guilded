@@ -90,7 +90,7 @@ function tick(dispatch, state) {
   getTicker(state).stats.ticks++;
   getTicker(state).hour++;
 
-  dispatch('increaseStageProgress'); 
+  dispatch('increaseStageProgress');
 
   if (state.stageProgress === 5) {
     state.ticker.advanceStage(dispatch, state);

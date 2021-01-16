@@ -1,9 +1,12 @@
+import React, { useContext } from 'react';
+import { AppContext } from '../world';
 import { Button } from 'antd';
 
 import Stats from "./stats";
 
 
-export default function Overview({dispatch, state}) {
+export default function Overview() {
+  const { state, dispatch } = useContext(AppContext);
   const {gold, members} = state.guild.stats;
 
   return (
