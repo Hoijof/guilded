@@ -3,7 +3,6 @@
 import update from 'immutability-helper';
 
 import { startQuest, advanceQuest } from '../utils/quest';
-import { STATE_PROGRESS_INCREMENT } from '../utils/consts';
 
 export default function reducer(state, action) {
   const computedAction = typeof action === 'string' ? { type: action} : action;
@@ -14,14 +13,6 @@ export default function reducer(state, action) {
       case 'changeSelectedMenu':
         return update(state, {
           selectedItem: {$set: computedAction.payload}
-        });
-      case 'increaseStageProgress': 
-        return update(state, {
-          stageProgress: {$set: state.stageProgress + STATE_PROGRESS_INCREMENT}
-        });
-      case 'resetStageProgress': 
-        return update(state, {
-          stageProgress: {$set: 0}
         });
       case 'switchPause':
         return update(state, {

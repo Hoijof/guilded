@@ -1,5 +1,5 @@
-import React, { useReducer } from "react";
-import { notification, Progress, Button } from 'antd';
+import React, { useState, useReducer } from "react";
+import { notification, Button } from 'antd';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 import ticker from '../utils/ticker';
@@ -17,6 +17,7 @@ export const AppContext = React.createContext();
 
 export default function World() {
   const [api, contextHolder] = notification.useNotification();
+  const [stageProgress, setStageProgress] = useState(0);
 
   const [state, dispatch] = useReducer(reducer, {
     guild: {
@@ -36,24 +37,22 @@ export default function World() {
       recruits: [1,2,3,4].map(() => createMember())
     },
     quests: {
-      quests: [createQuest(),createQuest(),createQuest(),createQuest(),createQuest()],
+      quests: [1,2,3,4].map(() => createQuest()),
       stats: {
-        questsCreated: 0,
+        questsCreated: 4,
         questStarted: 0,
         questsCompleted: 0
       }
     },
     selectedCity: 'City',
-    day: 0,
     stageSpeed: INIT_STAGE_SPEED,
-    stageProgress: 0,
     isPaused: false,
     notify: api,
     ticker: ticker.initialize(),
   });
 
   useInterval(() => {
-    state.ticker.tick(dispatch, state);
+    state.ticker.tick(dispatch, state, stageProgress, setStageProgress);
   }, state.stageSpeed)
 
   // #region Hotkeys

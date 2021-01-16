@@ -82,7 +82,7 @@ function checkEvents(dispatch, state) {
 
 //#region Ticking
 
-function tick(dispatch, state) {
+function tick(dispatch, state, stageProgress, setStageProgress) {
   if (state.isPaused) {
     return;
   }
@@ -90,12 +90,12 @@ function tick(dispatch, state) {
   getTicker(state).stats.ticks++;
   getTicker(state).hour++;
 
-  dispatch('increaseStageProgress');
+  setStageProgress(stageProgress + 1);
 
-  if (state.stageProgress === 5) {
+  if (stageProgress === 5) {
     state.ticker.advanceStage(dispatch, state);
   
-    dispatch('resetStageProgress');
+    setStageProgress(0);
   }   
 
   checkEvents(dispatch, state);
