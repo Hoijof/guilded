@@ -55,3 +55,6 @@ export function createMember(
   } 
 }
 
+export function getMemberFullName(member) {
+  return `${member.name} ${member.surname}`;
+}

@@ -1,8 +1,18 @@
 import { getTicker } from '../../redux/selectors';
 import { getRandomInt } from '../random';
 import { QUEST_TYPES } from '../consts';
+import { getCurrentTime, getTimeInFuture } from '../ticker/tickerUtils';
+
+
+// Quest types
 import generateStepsFetch from './fetch';
 
+/*
+ * Returns a number of a range mapped into another range
+*/
+Number.prototype.map = function ( in_min , in_max , out_min , out_max ) {
+  return ( this - in_min ) * ( out_max - out_min ) / ( in_max - in_min ) + out_min;
+};
 
 let lastId = 0;
 
@@ -16,44 +26,40 @@ export default function createQuest() {
     steps: [],
     reward: 0,
     questValue: 0,
+    level: 1,
+    expireDate: null,
+    accepted: false,
     active: false,
     completed: false,
     assignee: null,
     log: []
   }
 
-  const {name, description, reward, steps} = generateRandomQuestData(quest);
-
-  quest.name = name;
-  quest.description = description;
-  quest.reward = reward;
-  quest.steps = steps;
+  addRandomQuestData(quest);
 
   return quest;
 }
 
-function generateRandomQuestData(quest) {
+function addRandomQuestData(quest) {
   // Value in hours
   const questValue = getRandomInt(2, 8);
 
-  return {
-    name: 'Go Fetch',
-    description: 'Go find something somewhere',
-    reward: Math.floor(questValue * 2 + getRandomInt(-3, 4)),
-    questValue,
-    steps: generateStepsFetch(quest, questValue)
-  }
+  quest.name = 'Go Fetch';
+  // Will be added when Quests are generated dynamically not on creation of store.
+  //quest.expireDate = getTimeInFuture();
+  quest.level = questValue.map(2,8,1,5);
+  quest.description = 'Go find something somewhere';
+  quest.reward =  Math.round(questValue * 2 + getRandomInt(-3, 4));
+  quest.steps = generateStepsFetch(quest, questValue);
 }
 
 
 
-export function startQuest(state, quest) {
-  if (quest.active) {
-    return;
-  }
+export function startQuest(state, quest, member) {
+  quest.accepted = true;
+  quest.assignee = member;
 
-  quest.active = true;
-
+  // This will be executed on the guild checkup of the Morning (for example);
   executeStep(state, quest);
 }
 

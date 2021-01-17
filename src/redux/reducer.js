@@ -99,10 +99,10 @@ export default function reducer(state, action) {
         quests: {quests: { $splice: [[state.quests.quests.indexOf(computedAction.payload), 1]] }}
       });
     case 'startQuest': 
-      startQuest(state, computedAction.payload);
+      startQuest(state, computedAction.payload.quest, computedAction.payload.selectedMember);
 
       return  update(state, {
-        quests: {quests: { $splice: [[state.quests.quests.indexOf(computedAction.payload), 1, computedAction.payload]] }}
+        quests: {quests: { $splice: [[state.quests.quests.indexOf(computedAction.payload.quest), 1, computedAction.payload.quest]] }}
       });
     case 'advanceQuest': 
       advanceQuest(state, computedAction.payload);

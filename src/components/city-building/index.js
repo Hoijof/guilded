@@ -9,7 +9,6 @@ const { Header, Content } = Layout;
 
 function renderContent(dispatch, state, menuItems, stateNamespace) {
   const Content = menuItems.find((Item) => {
-    debugger;
     return Item.name === state[stateNamespace].selectedItem;
   });
 

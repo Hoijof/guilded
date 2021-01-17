@@ -27,7 +27,7 @@ export default function World() {
         members: [createMember("Hoijof", "indigo")],
         items: [],
       },
-      selectedItem: 'Overview' 
+      selectedItem: 'Overview',
     },
     city: {
       selectedItem: 'Overview',

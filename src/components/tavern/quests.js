@@ -1,51 +1,93 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AppContext } from "../world";
-import { Card, Typography, Space, Collapse, Button } from "antd";
+import { Card, Typography, Space, Collapse, Button, Menu, Dropdown } from "antd";
+import { StarOutlined, StarFilled, DownOutlined } from '@ant-design/icons';
 
-import { cardStyle } from '../../utils/styles';
+import { cardStyle } from "../../utils/styles";
+import { getGuildMembers } from '../../redux/selectors';
+import { getMemberFullName } from '../../utils/members';
+import { startQuest } from "../../utils/quest";
 
-const { Title, Text } = Typography;
+const { Title, Paragraph, Text } = Typography;
 const { Panel } = Collapse;
 
+function drawStarTimes(times) {
+  const result = [];
+
+  for (let i = 0; i < times; i++) {
+    result.push(<StarOutlined key={i} />);
+  }
+
+  return result;
+}
 export default function Quests() {
   const { state, dispatch } = useContext(AppContext);
 
   return (
-    <>
-      {state.quests.quests.map((quest, key) => {
+    <Collapse >
+      {state.quests.quests
+      .filter(quest => !quest.accepted)
+      .map((quest, key) => {
         return (
-          <Card key={key} style={cardStyle} title={quest.name}>
-            <Space style={{ width: "100%" }} direction="vertical">
-              <Text>name: {quest.name}</Text>
-              <Text>description: {quest.description}</Text>
-              <Text>reward: {quest.reward}</Text>
-              <Collapse ghost style={{ marginLeft: -15 }}>
-                <Panel header={`Quest Log ${quest.log.length}`} key="1">
-                  <Space style={{ width: "100%" }} direction="vertical">
-                    {quest.log.map((log) => (
-                      <div key={log}>{log}</div>
-                    ))}
-                  </Space>
-                </Panel>
-              </Collapse>
-              <Button
-                type="primary"
-                onClick={() => {
-                  dispatch({ type: "startQuest", payload: quest });
-
-                  state.notify.info({
-                    message: `You just started ${quest.name}`,
-                  });
-                }}
-              >
-                Start quest
-              </Button>
-            </Space>
-          </Card>
+          <Panel header={quest.name} key={quest.id} extra={drawStarTimes(quest.level)}>
+            <Quest quest={quest} />
+          </Panel>
         );
       })}
+    </Collapse>
+  );
+}
+Quests.displayName = "Quests";
+
+export function Quest({ quest }) {
+  const { state, dispatch } = useContext(AppContext);
+  const [selectedMember, setSelectedMember] = useState(null);
+
+  return (
+    <>
+      <Paragraph>{quest.description}</Paragraph>
+      <Paragraph>The reward for completing this quest is <Text strong>{quest.reward} gold coins</Text>.</Paragraph>
+      
+      <Paragraph>Select the Hero that will perform this quest: <SelectHeroDropdown selectedMember={selectedMember} onChange={setSelectedMember}/> </Paragraph>
+
+      <Button disabled={!selectedMember} onClick={() => { 
+          dispatch({ type: 'startQuest', payload: {quest, selectedMember}});
+          state.notify.info({
+            message: `You just started ${quest.name} with ${getMemberFullName(selectedMember)}`,
+          });
+      }}>
+        Start Quest!
+      </Button>
     </>
   );
 }
 
-Quests.displayName = 'Quests';
+export function SelectHeroDropdown({ selectedMember, onChange}) {
+  const { state, dispatch } = useContext(AppContext);
+
+  const menu = (
+    <Menu>
+      <Menu.Item key='none' onClick={() => onChange(null)} >
+        None
+      </Menu.Item>
+      {getGuildMembers(state).map(member => {
+        return (
+          <Menu.Item key={member.id} onClick={() => onChange(member)}>
+            <a>
+              {getMemberFullName(member)}
+            </a>
+          </Menu.Item>
+        )
+      })}
+    </Menu>
+  );
+
+  return (
+    <Dropdown overlay={menu}>
+      <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+        {selectedMember ? getMemberFullName(selectedMember) : 'None'} <DownOutlined />
+      </a>
+    </Dropdown>
+  );
+
+}
