@@ -1,5 +1,5 @@
 import { SEXES } from './consts';
-import {getRandomInt, getRandomColor, getRandomName, getRandomSurname} from './random';
+import {getRandomInt, getRandomNumber ,getRandomColor, getRandomName, getRandomSurname} from './random';
 
 let id = 0;
 
@@ -20,11 +20,19 @@ function getRandomStats() {
 function getInitialData() {
   return {
     missions: 0,
-    daysInGuild: 0,
+    yearsInGuild: 0,
   }
 }
 
-export default function createMember(
+export function getMemberCost(member) {
+  const statsCost = Object.values(member.stats).reduce((total, stat) => {
+    return total + stat;
+  }, 0);
+  
+  return ((member.level * 5) + statsCost);
+}
+
+export function createMember(
   name, sex = SEXES[getRandomInt(0,1)], surname = getRandomSurname(), 
   color = getRandomColor(), type = getRandomType(), stats = getRandomStats(),
   data = getInitialData()) {

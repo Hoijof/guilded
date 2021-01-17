@@ -8,7 +8,7 @@ import { MONTHS } from '../utils/consts';
 
 import reducer from '../redux/reducer';
 import City from './city';
-import createMember from '../utils/createMember';
+import { createMember } from '../utils/members';
 import createQuest from '../utils/quest';
 
 import { INIT_STAGE_SPEED } from '../utils/consts';
