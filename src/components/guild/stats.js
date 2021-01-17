@@ -1,6 +1,6 @@
 import { List, Typography, Divider } from 'antd';
 
-export default function GuildStats({name, gold, members}) {
+export default function Stats({name, gold, members}) {
     const data = [
         {name: "name", value: name},
         {name: 'gold', value: gold},
@@ -23,3 +23,5 @@ export default function GuildStats({name, gold, members}) {
         </>
     )
 }
+
+Stats.displayName = 'Stats';

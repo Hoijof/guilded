@@ -17,7 +17,7 @@ export default function CityMenu({defaultItem, menuItems, stateNamespace}) {
   
   return (
   <Menu onSelect={changeMenuItem} theme="light" mode="horizontal" defaultSelectedKeys={[defaultItem]} >
-    {menuItems.map(Item => <Menu.Item key={Item.name}>{Item.name}</Menu.Item>)}
+    {menuItems.map(Item => <Menu.Item key={Item.displayName}>{Item.displayName}</Menu.Item>)}
   </Menu>
   );
 }

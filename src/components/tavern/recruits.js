@@ -63,3 +63,5 @@ export default function Recruits() {
     </>
   );
 }
+
+Recruits.displayName = 'Recruits';

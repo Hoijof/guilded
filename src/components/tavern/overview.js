@@ -9,3 +9,5 @@ export default function Overview() {
 
   return <Text>Welcome to the Tavern, please take a seat!</Text>
 }
+
+Overview.displayName = "Overview";

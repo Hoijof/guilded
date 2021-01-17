@@ -57,10 +57,7 @@ export default function World() {
 
   // #region Hotkeys
   useHotkeys('space', () => dispatch('switchPause')) 
-  
-  useHotkeys('+', { splitKey: '-' }, function(e){
-    console.log('you pressed +');
-  })
+
   useHotkeys("*", event => {
     if (event.key === "+") {
       dispatch({type: 'changeStageSpeed', payload: -25})

@@ -47,3 +47,5 @@ export default function Quests() {
     </>
   );
 }
+
+Quests.displayName = 'Quests';
