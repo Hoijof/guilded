@@ -1,13 +1,13 @@
 import { getTicker, getQuests } from '../../redux/selectors';
 import { createEvent, rescheduleEvent } from '../event';
 import { getTimeInFuture, getCurrentTime, isAfter } from '../ticker/tickerUtils';
-import { EVENT_TYPES } from '../consts';
+import { EVENT_TYPES, QUEST_ARRIVAL_TIME } from '../consts';
 import { getRandomInt } from '../random';
 import createQuest from './index';
 
 export function createQuestEvent(ticker) {
   const startTime = getTimeInFuture(getCurrentTime(ticker), 24);
-  startTime[3] = 12;
+  startTime[3] = QUEST_ARRIVAL_TIME;
 
   return createEvent(
     startTime,
@@ -18,7 +18,11 @@ export function createQuestEvent(ticker) {
     (dispatch, state, event) => {
       const numberOfQuests = getRandomInt(0, 4);
 
-      const questsToExpire = getQuests(state).filter(quest => isAfter(getCurrentTime(ticker), quest.expiresAt));
+      const questsToExpire = getQuests(state).filter(quest => {
+        const isExpired = isAfter(getCurrentTime(ticker), quest.expiresAt);
+
+        return isExpired && !quest.accepted;
+      });
       
       questsToExpire.forEach(quest => {
         dispatch({type: 'removeQuest', payload: quest})
@@ -31,8 +35,7 @@ export function createQuestEvent(ticker) {
       const ticker = getTicker(state);
       const startTime = getTimeInFuture(getCurrentTime(ticker), 24);
 
-      startTime[3] = 12;
-      console.log('reescheduling quests event');
+      startTime[3] = QUEST_ARRIVAL_TIME;
 
       ticker.events.push(rescheduleEvent(event, startTime, getTimeInFuture(startTime, 1)));
     });

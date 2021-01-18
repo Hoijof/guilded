@@ -9,7 +9,6 @@ import { MONTHS } from '../utils/consts';
 import reducer from '../redux/reducer';
 import City from './city';
 import { createMember } from '../utils/members';
-import createQuest from '../utils/quest';
 
 import { INIT_STAGE_SPEED } from '../utils/consts';
 
@@ -27,6 +26,7 @@ export default function World() {
         members: [createMember("Hoijof", "indigo")],
         items: [],
       },
+      logs: [],
       selectedItem: 'Overview',
     },
     city: {
@@ -68,6 +68,8 @@ export default function World() {
     }
   })
   //#endregion
+
+  window.state = state;
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>

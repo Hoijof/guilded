@@ -1,11 +1,12 @@
 import { getTicker } from '../../redux/selectors';
 import { getRandomInt } from '../random';
-import { QUEST_TYPES } from '../consts';
+import { LOCATIONS } from '../consts';
 import { getCurrentTime, getTimeInFuture } from '../ticker/tickerUtils';
 
 
 // Quest types
 import generateStepsFetch from './fetch';
+import { addLog } from './questUtils';
 
 /*
  * Returns a number of a range mapped into another range
@@ -34,9 +35,10 @@ export default function createQuest(state) {
     active: false,
     completed: false,
     assignee: null,
-    log: [],
+    logs: [],
     createdAt: getCurrentTime(ticker),
     expiresAt,
+    startedAt: null
   }
 
   addRandomQuestData(quest);
@@ -57,28 +59,34 @@ function addRandomQuestData(quest) {
   quest.steps = generateStepsFetch(quest, questValue);
 }
 
-
-
-export function startQuest(state, quest, member) {
+export function acceptQuest(state, quest, member) {
   quest.accepted = true;
   quest.assignee = member;
-  member.task = quest;
+  member.task = quest;  
+}
 
-  // This will be executed on the guild checkup of the Morning (for example);
+export function startQuest(state, quest) {
+  quest.startedAt = getCurrentTime(getTicker(state));
+  quest.active = true;
+
+  quest.assignee.location = LOCATIONS.TRAVELING;
+
   executeStep(state, quest);
 }
 
 export function advanceQuest(state, quest) {
+  debugger;
   quest.steps.shift()
 
   if (quest.steps.length === 0) {
-    return completeQuest(quest);
+    return completeQuest(state, quest);
   }
 
   executeStep(state, quest);
 }
 
 export function executeStep(state, quest) {
+  debugger;
   const event = quest.steps[0](state);
   const ticker = getTicker(state);
 
@@ -86,12 +94,13 @@ export function executeStep(state, quest) {
   ticker.todayEvents.push(event);
 }
 
-function completeQuest(quest) {
+function completeQuest(state, quest) {
   quest.completed = true;
   quest.active = false;  
 
   quest.assignee.task = null;
+  quest.assignee.location = LOCATIONS.GUILD;
 
-  quest.log.push('Quest completed');
+  addLog(state, quest, 'Quest completed');
 } 
 

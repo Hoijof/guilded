@@ -20,9 +20,9 @@ export function getHumanTime(time) {
   return `${day}/${MONTHS[time[1]]}/${time[0]}`;
 }
 
-// [475, 0, 3, 12] [475, 0, 3, 5] 
+// [475, 0, 3, 12] [475, 0, 3, 5]
 export function isAfter(startTime, endTime) {
-  return getDifference(startTime, endTime) > 0;
+  return getDifference(startTime, endTime) < 0;
 }
 
 export function getDifferenceTime(startTime, endTime) {

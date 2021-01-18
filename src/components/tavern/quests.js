@@ -39,7 +39,7 @@ export default function Quests() {
       .filter(quest => !quest.accepted)
       .map((quest, key) => {
         return (
-          <Panel header={`${quest.name} `} key={quest.id} extra={[renderExpireTime(state, quest) , ...drawStarTimes(quest.level)]}>
+          <Panel header={`${quest.name} (${quest.reward} coins)`} key={quest.id} extra={[renderExpireTime(state, quest) , ...drawStarTimes(quest.level)]}>
             <Quest quest={quest} />
           </Panel>
         );
@@ -61,9 +61,9 @@ export function Quest({ quest }) {
       <Paragraph>Select the Hero that will perform this quest: <SelectHeroDropdown selectedMember={selectedMember} onChange={setSelectedMember}/> </Paragraph>
 
       <Button disabled={!selectedMember} onClick={() => { 
-          dispatch({ type: 'startQuest', payload: {quest, selectedMember}});
+          dispatch({ type: 'acceptQuest', payload: {quest, selectedMember}});
           state.notify.info({
-            message: `You just started ${quest.name} with ${getMemberFullName(selectedMember)}`,
+            message: `You just accepted ${quest.name} with ${getMemberFullName(selectedMember)}`,
           });
       }}>
         Start Quest!

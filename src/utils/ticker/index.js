@@ -2,6 +2,7 @@ import { getTicker } from '../../redux/selectors';
 import { isToday, getNextTime } from './tickerUtils';
 import { createEvent, rescheduleEvent } from '../event';
 import { createQuestEvent } from '../quest/createQuestEvent';
+import { createGuildCheckupEvent } from '../guild/createGuildEvents';
 
 import { MONTH_LENGTH, TIME_OF_THE_DAY, EVENT_TYPES } from '../../utils/consts';
 
@@ -45,8 +46,9 @@ function initialize() {
   });
 
   const questEvent = createQuestEvent(ticker);
+  const guildCheckupEvent = createGuildCheckupEvent(ticker);
 
-  ticker.events.push(festivityOne, festivityTwo, questEvent);
+  ticker.events.push(festivityOne, festivityTwo, questEvent, guildCheckupEvent);
 
   computeDayEvents({
     ticker 
@@ -68,17 +70,21 @@ function computeDayEvents(state) {
 function checkEvents(dispatch, state) {
   const ticker = getTicker(state);
 
+  // Events that start
   ticker.todayEvents.filter((event) => {
-    return (event.start[3] === ticker.hour) || (event.end[3] === ticker.hour)
+    return (isToday(ticker, event.start) && event.start[3] === ticker.hour)
   }).forEach((event) => {
-    if (isToday(ticker, event.start) && event.start[3] === ticker.hour) {
-      event.startHandler(dispatch, state, event);
-      ticker.activeEvents.push(event);
-    } else {
-      event.endHandler(dispatch, state, event);
-      ticker.events.splice(ticker.events.indexOf(event), 1);
-      ticker.activeEvents.splice(ticker.activeEvents.indexOf(event), 1);
-    }
+    event.startHandler(dispatch, state, event);
+    ticker.activeEvents.push(event);
+  });
+
+  // Events that end
+  ticker.todayEvents.filter((event) => {
+    return (isToday(ticker, event.end) && event.end[3] === ticker.hour)
+  }).forEach((event) => {
+    event.endHandler(dispatch, state, event);
+    ticker.events.splice(ticker.events.indexOf(event), 1);
+    ticker.activeEvents.splice(ticker.activeEvents.indexOf(event), 1);
   });
 }
 

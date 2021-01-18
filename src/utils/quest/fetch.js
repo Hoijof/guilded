@@ -2,7 +2,7 @@ import { getTicker } from '../../redux/selectors';
 import { createEvent }  from '../event';
 import { getTimeInFuture, getCurrentTime } from '../ticker/tickerUtils';
 import { EVENT_TYPES, QUEST_TYPES } from '../consts';
-import { createStepTravelFor } from './questUtils';
+import { createStepTravelFor, addLog } from './questUtils';
 
 
 function createStepQuestObjective(quest, questType) {
@@ -15,9 +15,9 @@ function createStepQuestObjective(quest, questType) {
 
     return createEvent(currentTime, endTime, 'Executing Quest', 'None', EVENT_TYPES.QUEST,
       (dispatch, state, event) => {
-        quest.log.push(`Started searching for the thing.`)
+        addLog(store, quest, 'Started searching for the thing.');
       }, (dispatch, state, event) => {
-        quest.log.push(`Found the thing.`);
+        addLog(store, quest, 'Found the thing.');
 
         dispatch({type: 'advanceQuest', payload: quest});
       })

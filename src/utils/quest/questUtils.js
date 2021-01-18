@@ -13,13 +13,25 @@ export function createStepTravelFor(quest, questValue) {
     
     return createEvent(currentTime, endTime, 'Quest Traveling', 'None', EVENT_TYPES.QUEST,
       (dispatch, state, event) => {
-        quest.log.push(`Going to travel for ${questValue} hours.`)
+        debugger;
+        addLog(state, quest, `Going to travel for ${questValue} hours.`);
       }, (dispatch, state, event) => {
-        quest.log.push(`We arrived at our destination`);
+        debugger;
+        addLog(state, quest, `We arrived at our destination`);
 
         dispatch({type: 'advanceQuest', payload: quest});
       })
   };
   
   return execute;
+}
+
+let logId = 0;
+
+export function addLog(state, quest, log) {
+  quest.logs.push({
+    id: ++logId,
+    createdAt: getCurrentTime(getTicker(state)),
+    log
+  });
 }

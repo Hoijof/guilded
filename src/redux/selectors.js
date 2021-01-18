@@ -18,6 +18,19 @@ export function getGuildMembers(state) {
   return getGuild(state).stats.members;
 }
 
+// #region Quests
+
 export function getQuests(state) {
   return state.quests.quests;
 }
+
+export function getAcceptedQuests(state) {
+  return getQuests(state).filter(quest => quest.accepted);
+}
+
+export function getAcceptedAndNotDepartedQuests(state) {
+  return getAcceptedQuests(state).filter(quest => !quest.startedAt);
+}
+
+//#endregion
+
