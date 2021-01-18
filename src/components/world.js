@@ -37,9 +37,9 @@ export default function World() {
       recruits: [1,2,3,4].map(() => createMember())
     },
     quests: {
-      quests: [1,2,3,4].map(() => createQuest()),
+      quests: [],
       stats: {
-        questsCreated: 4,
+        questsCreated: 0,
         questStarted: 0,
         questsCompleted: 0
       }

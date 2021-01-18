@@ -1,4 +1,4 @@
-import { TIME_OF_THE_DAY } from '../consts';
+import { TIME_OF_THE_DAY, MONTHS } from '../consts';
 
 
 
@@ -15,13 +15,22 @@ export function getCurrentTime(ticker) {
 }
 
 export function getHumanTime(time) {
-  
+  const day = time[2] > 10 ? time[2] : `0${time[2]}`;
+
+  return `${day}/${MONTHS[time[1]]}/${time[0]}`;
+}
+
+// [475, 0, 3, 12] [475, 0, 3, 5] 
+export function isAfter(startTime, endTime) {
+  return getDifference(startTime, endTime) > 0;
 }
 
 export function getDifferenceTime(startTime, endTime) {
-  const difference = getTotalHours(endTime) - getTotalHours(startTime);
+  return getTimeFromHours(getDifference(startTime, endTime));
+}
 
-  return getTimeFromHours(difference);
+export function getDifference(startTime, endTime) {
+  return getTotalHours(endTime) - getTotalHours(startTime);
 }
 
 /*

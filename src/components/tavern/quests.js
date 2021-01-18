@@ -3,10 +3,9 @@ import { AppContext } from "../world";
 import { Card, Typography, Space, Collapse, Button, Menu, Dropdown } from "antd";
 import { StarOutlined, StarFilled, DownOutlined } from '@ant-design/icons';
 
-import { cardStyle } from "../../utils/styles";
-import { getGuildMembers } from '../../redux/selectors';
+import { getGuildMembers, getTicker } from '../../redux/selectors';
 import { getMemberFullName } from '../../utils/members';
-import { startQuest } from "../../utils/quest";
+import { getDifference, getHumanTime, getCurrentTime } from '../../utils/ticker/tickerUtils';
 
 const { Title, Paragraph, Text } = Typography;
 const { Panel } = Collapse;
@@ -20,6 +19,17 @@ function drawStarTimes(times) {
 
   return result;
 }
+
+function renderExpireTime(state, quest) {
+  const difference = getDifference(getCurrentTime(getTicker(state)), quest.expiresAt);
+  let type = 'secondary';
+  if (difference < 24) {
+    type = difference < 0 ? 'danger' : 'warning';
+  }
+
+
+  return <Text type={type}> Expires: {getHumanTime(quest.expiresAt)} </Text>
+}
 export default function Quests() {
   const { state, dispatch } = useContext(AppContext);
 
@@ -29,7 +39,7 @@ export default function Quests() {
       .filter(quest => !quest.accepted)
       .map((quest, key) => {
         return (
-          <Panel header={quest.name} key={quest.id} extra={drawStarTimes(quest.level)}>
+          <Panel header={`${quest.name} `} key={quest.id} extra={[renderExpireTime(state, quest) , ...drawStarTimes(quest.level)]}>
             <Quest quest={quest} />
           </Panel>
         );
@@ -70,7 +80,9 @@ export function SelectHeroDropdown({ selectedMember, onChange}) {
       <Menu.Item key='none' onClick={() => onChange(null)} >
         None
       </Menu.Item>
-      {getGuildMembers(state).map(member => {
+      {getGuildMembers(state)
+      .filter(member => !member.task)
+      .map(member => {
         return (
           <Menu.Item key={member.id} onClick={() => onChange(member)}>
             <a>

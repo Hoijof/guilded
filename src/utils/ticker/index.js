@@ -1,14 +1,15 @@
 import { getTicker } from '../../redux/selectors';
 import { isToday, getNextTime } from './tickerUtils';
 import { createEvent, rescheduleEvent } from '../event';
+import { createQuestEvent } from '../quest/createQuestEvent';
 
 import { MONTH_LENGTH, TIME_OF_THE_DAY, EVENT_TYPES } from '../../utils/consts';
 
 
 let ticker;
 
-function initialize(state) {
-  ticker = {
+function initialize() {
+  const ticker = {
     currentStage: TIME_OF_THE_DAY.MORNING,
     hour: 0,
     day: 1,
@@ -43,7 +44,9 @@ function initialize(state) {
     ticker.events.push(rescheduleEvent(event, [ticker.year + 1, 0, 1, 8], [ticker.year + 1, 0, 8, 1]));
   });
 
-  ticker.events.push(festivityOne, festivityTwo);
+  const questEvent = createQuestEvent(ticker);
+
+  ticker.events.push(festivityOne, festivityTwo, questEvent);
 
   computeDayEvents({
     ticker 

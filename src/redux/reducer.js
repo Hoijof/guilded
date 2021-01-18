@@ -92,7 +92,7 @@ export default function reducer(state, action) {
   switch (computedAction.type) {
     case 'addQuest':
       return update(state, {
-        quests: { quests: {$push: computedAction.payload } }
+        quests: { quests: {$push: [computedAction.payload] } }
       });
     case 'removeQuest': 
       return update(state, {

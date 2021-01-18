@@ -17,3 +17,7 @@ export function getGuild(state) {
 export function getGuildMembers(state) {
   return getGuild(state).stats.members;
 }
+
+export function getQuests(state) {
+  return state.quests.quests;
+}

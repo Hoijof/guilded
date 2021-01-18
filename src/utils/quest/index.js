@@ -16,8 +16,11 @@ Number.prototype.map = function ( in_min , in_max , out_min , out_max ) {
 
 let lastId = 0;
 
-export default function createQuest() {
+export default function createQuest(state) {
   const id = ++lastId;
+  const ticker = getTicker(state);
+
+  const expiresAt = getTimeInFuture(getCurrentTime(ticker), getRandomInt(1, 4) * 24);
 
   const quest = {
     id,
@@ -27,12 +30,13 @@ export default function createQuest() {
     reward: 0,
     questValue: 0,
     level: 1,
-    expireDate: null,
     accepted: false,
     active: false,
     completed: false,
     assignee: null,
-    log: []
+    log: [],
+    createdAt: getCurrentTime(ticker),
+    expiresAt,
   }
 
   addRandomQuestData(quest);
@@ -58,6 +62,7 @@ function addRandomQuestData(quest) {
 export function startQuest(state, quest, member) {
   quest.accepted = true;
   quest.assignee = member;
+  member.task = quest;
 
   // This will be executed on the guild checkup of the Morning (for example);
   executeStep(state, quest);
@@ -85,6 +90,8 @@ function completeQuest(quest) {
   quest.completed = true;
   quest.active = false;  
 
-  quest.log.push('Quest finished');
+  quest.assignee.task = null;
+
+  quest.log.push('Quest completed');
 } 
 

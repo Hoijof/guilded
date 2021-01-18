@@ -1,4 +1,4 @@
-import { SEXES } from './consts';
+import { SEXES, LOCATIONS } from './consts';
 import {getRandomInt, getRandomNumber ,getRandomColor, getRandomName, getRandomSurname} from './random';
 
 let id = 0;
@@ -49,6 +49,7 @@ export function createMember(
     level: 1,
     type,
     task: null,
+    location: LOCATIONS.GUILD,
     stats,
     computedStats: stats,
     data
