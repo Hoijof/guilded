@@ -1,7 +1,7 @@
 import { getTicker } from '../../redux/selectors';
 import { createEvent }  from '../event';
 import { getTimeInFuture, getCurrentTime } from '../ticker/tickerUtils';
-import { EVENT_TYPES } from '../consts';
+import { EVENT_TYPES, LOCATIONS } from '../consts';
 import { restMemberFor, getMemberRestTime, getMemberTravelCapacity, consumeTravelCapacity } from '../members';
 
 export function createStepTravelFor(quest, questValue) {
@@ -18,6 +18,8 @@ export function createStepTravelFor(quest, questValue) {
     return createEvent(currentTime, endTime, 'Quest Traveling', 'None', EVENT_TYPES.QUEST,
       (dispatch, state, event) => {
         addLog(state, quest, `Going to travel for ${timeTraveling} of ${questValue} hours.`);
+        
+        quest.assignee.location = LOCATIONS.TRAVELING;
       }, (dispatch, state, event) => {
         let message = 'We arrived at our destination';
 
@@ -27,8 +29,11 @@ export function createStepTravelFor(quest, questValue) {
           quest.steps.splice(1, 0, createRestEvent(quest, questValue - memberTravelCapacity));
 
           message = "We have to stop due to lack of energy.";
-        }
+        } 
 
+        
+        quest.assignee.location = LOCATIONS.CITY;
+        
         addLog(state, quest, message);
 
         dispatch({type: 'advanceQuest', payload: quest});
@@ -49,12 +54,17 @@ export function createRestEvent(quest, remainingQuestValue) {
     return createEvent(currentTime, endTime, 'Quest Resting', 'None', EVENT_TYPES.QUEST,
       (dispatch, state, event) => {
         addLog(state, quest, `Going to rest for ${memberRestTime} hours.`);
+
+        quest.assignee.location = LOCATIONS.CAMP
+
       }, (dispatch, state, event) => {
         addLog(state, quest, `We are rested!`);
 
         restMemberFor(quest.assignee, memberRestTime);
 
         quest.steps.splice(1, 0, createStepTravelFor(quest, remainingQuestValue));
+
+        quest.assignee.location = LOCATIONS.TRAVELING;
 
         dispatch({type: 'advanceQuest', payload: quest});
       })

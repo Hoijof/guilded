@@ -37,7 +37,8 @@ export const SEXES = {
 export const LOCATIONS = {
   GUILD: 'Guild',
   TRAVELING: 'Traveling',
-  CITY: 'City'
+  CITY: 'City',
+  CAMP: 'Camp'
 };
 
 export const MAX_ENERGY_RECOVERY_TIME = 4;

@@ -69,8 +69,6 @@ export function startQuest(state, quest) {
   quest.startedAt = getCurrentTime(getTicker(state));
   quest.active = true;
 
-  quest.assignee.location = LOCATIONS.TRAVELING;
-
   executeStep(state, quest);
 }
 
