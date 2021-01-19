@@ -6,7 +6,7 @@ import { getRandomInt } from '../random';
 import createQuest from './index';
 
 export function createQuestEvent(ticker) {
-  const startTime = getTimeInFuture(getCurrentTime(ticker), 24);
+  const startTime = getCurrentTime(ticker);
   startTime[3] = QUEST_ARRIVAL_TIME;
 
   return createEvent(

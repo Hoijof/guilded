@@ -39,3 +39,5 @@ export const LOCATIONS = {
   TRAVELING: 'Traveling',
   CITY: 'City'
 };
+
+export const MAX_ENERGY_RECOVERY_TIME = 4;

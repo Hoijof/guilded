@@ -75,7 +75,6 @@ export function startQuest(state, quest) {
 }
 
 export function advanceQuest(state, quest) {
-  debugger;
   quest.steps.shift()
 
   if (quest.steps.length === 0) {
@@ -86,7 +85,6 @@ export function advanceQuest(state, quest) {
 }
 
 export function executeStep(state, quest) {
-  debugger;
   const event = quest.steps[0](state);
   const ticker = getTicker(state);
 
