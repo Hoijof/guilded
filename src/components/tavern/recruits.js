@@ -4,6 +4,7 @@ import { Card, Typography, Space, Collapse, Button } from "antd";
 
 import { cardStyle } from '../../utils/styles';
 import renderStats, { sumStats } from '../../utils/renderStats';
+import { getMemberCost } from '../../utils/members';
 
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
@@ -16,7 +17,7 @@ export default function Recruits() {
       <Title level={4}>Available Recruits</Title>
 
       {state.tavern.recruits.map((member, key) => {
-        const cost = member.level * 5;
+        const cost = getMemberCost(member);
         const canHire = state.guild.stats.gold >= cost;
 
         return (
@@ -63,3 +64,5 @@ export default function Recruits() {
     </>
   );
 }
+
+Recruits.displayName = 'Recruits';

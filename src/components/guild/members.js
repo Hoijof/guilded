@@ -23,7 +23,8 @@ export default function Members() {
               <Text>Gold: {member.gold} <Text style={{fontSize: 18, cursor: 'pointer'}} onClick={() => {dispatch({type: "addGoldToMember", payload: member})}}>+</Text></Text>
               <Text>Level: {member.level} ({member.exp} / {member.level * 2}) {member.exp > member.level * 2 ? '▲' : null}</Text>
               <Text>Type: {member.type}</Text>
-              <Text>Task: {member.task ? member.task : "None"}</Text>
+              <Text>Location: {member.location}</Text>
+              <Text>Task: {member.task ? member.task.name : "None"}</Text>
               <Collapse ghost style={{marginLeft: -15}}>
                 <Panel header={`Stats (${sumStats(member)})`} key="1">
                   <Space style={{width: '100%'}} direction="vertical">
@@ -44,3 +45,5 @@ export default function Members() {
     </>
   )
 }
+
+Members.displayName = 'Members';

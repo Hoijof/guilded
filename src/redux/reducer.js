@@ -2,8 +2,8 @@
 // https://github.com/kolodny/immutability-helper
 import update from 'immutability-helper';
 
-import { startQuest, advanceQuest } from '../utils/quest';
-import { STATE_PROGRESS_INCREMENT } from '../utils/consts';
+import { acceptQuest, advanceQuest } from '../utils/quest';
+import { getMemberCost } from '../utils/members';
 
 export default function reducer(state, action) {
   const computedAction = typeof action === 'string' ? { type: action} : action;
@@ -14,14 +14,6 @@ export default function reducer(state, action) {
       case 'changeSelectedMenu':
         return update(state, {
           selectedItem: {$set: computedAction.payload}
-        });
-      case 'increaseStageProgress': 
-        return update(state, {
-          stageProgress: {$set: state.stageProgress + STATE_PROGRESS_INCREMENT}
-        });
-      case 'resetStageProgress': 
-        return update(state, {
-          stageProgress: {$set: 0}
         });
       case 'switchPause':
         return update(state, {
@@ -76,7 +68,7 @@ export default function reducer(state, action) {
         guild: {
           stats: {
             members: { $push: [computedAction.payload] },
-            gold: { $set: state.guild.stats.gold - (computedAction.payload.level * 5) }
+            gold: { $set: state.guild.stats.gold - getMemberCost(computedAction.payload) }
           }
         },
         tavern: {
@@ -101,23 +93,32 @@ export default function reducer(state, action) {
   switch (computedAction.type) {
     case 'addQuest':
       return update(state, {
-        quests: { quests: {$push: computedAction.payload } }
+        quests: { quests: {$push: [computedAction.payload] } }
       });
     case 'removeQuest': 
       return update(state, {
         quests: {quests: { $splice: [[state.quests.quests.indexOf(computedAction.payload), 1]] }}
       });
-    case 'startQuest': 
-      startQuest(state, computedAction.payload);
+    case 'acceptQuest': 
+      acceptQuest(state, computedAction.payload.quest, computedAction.payload.selectedMember);
 
       return  update(state, {
-        quests: {quests: { $splice: [[state.quests.quests.indexOf(computedAction.payload), 1, computedAction.payload]] }}
+        quests: {quests: { $splice: [[state.quests.quests.indexOf(computedAction.payload.quest), 1, computedAction.payload.quest]] }}
       });
     case 'advanceQuest': 
       advanceQuest(state, computedAction.payload);
       
       return update(state, {
         quests: {quests: { $splice: [[state.quests.quests.indexOf(computedAction.payload), 1, computedAction.payload]] }}
+      });
+    case 'closeQuest':
+      return update(state, {
+        guild: {
+          stats: {
+            gold: {$apply: (gold) => gold + computedAction.payload.reward}
+          }
+        },
+        quests: {quests: { $splice: [[state.quests.quests.indexOf(computedAction.payload), 1]] }}
       });
     default:
   }

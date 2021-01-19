@@ -11,7 +11,7 @@ export default function Overview() {
 
   return (
     <>
-      <Stats {...state.guild.stats} />
+      <Stats />
       <br />
       {gold === 0 && members.length === 1 ? (
         <Button
@@ -26,3 +26,5 @@ export default function Overview() {
     </>
   );
 }
+
+Overview.displayName = "Overview";

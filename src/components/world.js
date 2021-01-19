@@ -1,5 +1,5 @@
-import React, { useReducer } from "react";
-import { notification, Progress, Button } from 'antd';
+import React, { useState, useReducer } from "react";
+import { notification, Button } from 'antd';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 import ticker from '../utils/ticker';
@@ -8,8 +8,7 @@ import { MONTHS } from '../utils/consts';
 
 import reducer from '../redux/reducer';
 import City from './city';
-import createMember from '../utils/createMember';
-import createQuest from '../utils/quest';
+import { createMember } from '../utils/members';
 
 import { INIT_STAGE_SPEED } from '../utils/consts';
 
@@ -17,6 +16,7 @@ export const AppContext = React.createContext();
 
 export default function World() {
   const [api, contextHolder] = notification.useNotification();
+  const [stageProgress, setStageProgress] = useState(0);
 
   const [state, dispatch] = useReducer(reducer, {
     guild: {
@@ -26,7 +26,8 @@ export default function World() {
         members: [createMember("Hoijof", "indigo")],
         items: [],
       },
-      selectedItem: 'Overview' 
+      logs: [],
+      selectedItem: 'Overview',
     },
     city: {
       selectedItem: 'Overview',
@@ -36,7 +37,7 @@ export default function World() {
       recruits: [1,2,3,4].map(() => createMember())
     },
     quests: {
-      quests: [createQuest(),createQuest(),createQuest(),createQuest(),createQuest()],
+      quests: [],
       stats: {
         questsCreated: 0,
         questStarted: 0,
@@ -44,24 +45,19 @@ export default function World() {
       }
     },
     selectedCity: 'City',
-    day: 0,
     stageSpeed: INIT_STAGE_SPEED,
-    stageProgress: 0,
     isPaused: false,
     notify: api,
     ticker: ticker.initialize(),
   });
 
   useInterval(() => {
-    state.ticker.tick(dispatch, state);
+    state.ticker.tick(dispatch, state, stageProgress, setStageProgress);
   }, state.stageSpeed)
 
   // #region Hotkeys
   useHotkeys('space', () => dispatch('switchPause')) 
-  
-  useHotkeys('+', { splitKey: '-' }, function(e){
-    console.log('you pressed +');
-  })
+
   useHotkeys("*", event => {
     if (event.key === "+") {
       dispatch({type: 'changeStageSpeed', payload: -25})
@@ -72,6 +68,8 @@ export default function World() {
     }
   })
   //#endregion
+
+  window.state = state;
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>

@@ -23,7 +23,7 @@ export function roll(max) {
 /*
  * Returns true or false based in a % probability
 */
-function isHappening(prob) {
+export function isHappening(prob) {
 	return getRandomInt(0, 100) <= prob;
 }
 
@@ -33,7 +33,7 @@ export function getRandomName(sex = SEXES.MALE) {
 	} else if (sex == SEXES.FEMALE) {
 		return femaleNames[getRandomInt(0,femaleNames.length-1)];
 	}
-	return 'Bernt';
+	return 'Bernt'; 
 }
 
 export function getRandomSurname() {
