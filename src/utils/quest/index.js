@@ -51,8 +51,6 @@ function addRandomQuestData(quest) {
   const questValue = getRandomInt(2, 8);
 
   quest.name = 'Go Fetch';
-  // Will be added when Quests are generated dynamically not on creation of store.
-  //quest.expireDate = getTimeInFuture();
   quest.level = questValue.map(2,8,1,5);
   quest.description = 'Go find something somewhere';
   quest.reward =  Math.round(questValue * 2 + getRandomInt(-3, 4));
