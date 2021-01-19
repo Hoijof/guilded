@@ -1,6 +1,6 @@
 export const SLOW_STAGE_SPEED = 1500;
-export const INIT_STAGE_SPEED = 100;
-export const FAST_STAGE_SPEED = 500;
+export const INIT_STAGE_SPEED = 750;
+export const FAST_STAGE_SPEED = 400;
 export const MONTH_LENGTH = 15;
 
 export const QUEST_ARRIVAL_TIME = 12;
