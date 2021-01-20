@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { AppContext } from '../world';
+import React, { useContext } from "react";
+import { AppContext } from "../world";
 import { Layout } from "antd";
 
-import Menu from './menu';
-import { getNamespacedDefaultMenu } from '../../redux/selectors';
+import Menu from "./menu";
+import { getNamespacedDefaultMenu } from "../../redux/selectors";
 
 const { Header, Content } = Layout;
 
@@ -15,22 +15,33 @@ function renderContent(dispatch, state, menuItems, stateNamespace) {
   return Content ? <Content /> : "error";
 }
 
-export default function CityBuilding({menuItems, stateNamespace}) {
+export default function CityBuilding({ menuItems, stateNamespace }) {
   const { state, dispatch } = useContext(AppContext);
 
   return (
-    <Layout style={{ background: 'white'}}>
+    <Layout style={{ background: "white" }}>
       <Header
         theme="light"
         style={{
-          background: 'white',
-          padding: 0
+          background: "white",
+          padding: 0,
         }}
       >
-        <Menu defaultItem={getNamespacedDefaultMenu(state, stateNamespace)} menuItems={menuItems} stateNamespace={stateNamespace} />
+        <Menu
+          defaultItem={getNamespacedDefaultMenu(state, stateNamespace)}
+          menuItems={menuItems}
+          stateNamespace={stateNamespace}
+        />
       </Header>
-      <Content style={{ background: 'white', padding: 10, margin: "24px 16px 0", overflow: "initial"}}>
-          {renderContent(dispatch, state, menuItems, stateNamespace) }
+      <Content
+        style={{
+          background: "white",
+          padding: 10,
+          margin: "24px 16px 0",
+          overflow: "initial",
+        }}
+      >
+        {renderContent(dispatch, state, menuItems, stateNamespace)}
       </Content>
     </Layout>
   );

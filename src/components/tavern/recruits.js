@@ -2,9 +2,9 @@ import React, { useContext } from "react";
 import { AppContext } from "../world";
 import { Card, Typography, Space, Collapse, Button } from "antd";
 
-import { cardStyle } from '../../utils/styles';
-import renderStats, { sumStats } from '../../utils/renderStats';
-import { getMemberCost } from '../../utils/members';
+import { cardStyle } from "../../utils/styles";
+import renderStats, { sumStats } from "../../utils/renderStats";
+import { getMemberCost } from "../../utils/members";
 
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
@@ -65,4 +65,4 @@ export default function Recruits() {
   );
 }
 
-Recruits.displayName = 'Recruits';
+Recruits.displayName = "Recruits";

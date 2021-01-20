@@ -1,38 +1,41 @@
-
 // https://github.com/kolodny/immutability-helper
-import update from 'immutability-helper';
+import update from "immutability-helper";
 
-import { acceptQuest, advanceQuest } from '../utils/quest';
-import { getMemberCost } from '../utils/members';
+import { acceptQuest, advanceQuest } from "../utils/quest";
+import { getMemberCost } from "../utils/members";
 
 export default function reducer(state, action) {
-  const computedAction = typeof action === 'string' ? { type: action} : action;
+  const computedAction = typeof action === "string" ? { type: action } : action;
 
-  if (!['increaseStageProgress', 'resetStageProgress'].includes(computedAction.type))
-  console.log(computedAction);
+  if (
+    !["increaseStageProgress", "resetStageProgress"].includes(
+      computedAction.type
+    )
+  )
+    console.log(computedAction);
   switch (computedAction.type) {
-      case 'changeSelectedMenu':
-        return update(state, {
-          selectedItem: {$set: computedAction.payload}
-        });
-      case 'switchPause':
-        return update(state, {
-          isPaused: {$set: !state.isPaused}
-        });
-      case 'changeStageSpeed':
-        return update(state, {
-          stageSpeed: {$set: state.stageSpeed + computedAction.payload}
-        }); 
-      default:
+    case "changeSelectedMenu":
+      return update(state, {
+        selectedItem: { $set: computedAction.payload },
+      });
+    case "switchPause":
+      return update(state, {
+        isPaused: { $set: !state.isPaused },
+      });
+    case "changeStageSpeed":
+      return update(state, {
+        stageSpeed: { $set: state.stageSpeed + computedAction.payload },
+      });
+    default:
   }
 
   // #region Menus
   switch (computedAction.type) {
-    case 'changeSelectedContentMenu': 
+    case "changeSelectedContentMenu":
       return update(state, {
         [computedAction.payload.stateNamespace]: {
-          selectedItem: { $set: computedAction.payload.key}
-        }
+          selectedItem: { $set: computedAction.payload.key },
+        },
       });
     default:
   }
@@ -41,84 +44,139 @@ export default function reducer(state, action) {
 
   // Guild
   switch (computedAction.type) {
-    case 'askFounding':
+    case "askFounding":
       return update(state, {
         guild: {
           stats: {
-            gold: { $set: 25 }
-          }
-        }
+            gold: { $set: 25 },
+          },
+        },
       });
-    case 'addGoldToMember':
-      var memberIndex = state.guild.stats.members.indexOf(computedAction.payload);
-      var updatedMember = update(computedAction.payload, { gold: { $set: computedAction.payload.gold + 5}});
+    case "addGoldToMember":
+      var memberIndex = state.guild.stats.members.indexOf(
+        computedAction.payload
+      );
+      var updatedMember = update(computedAction.payload, {
+        gold: { $set: computedAction.payload.gold + 5 },
+      });
 
       return update(state, {
         guild: {
           stats: {
             members: {
-              $splice: [[memberIndex, 1, updatedMember]]
+              $splice: [[memberIndex, 1, updatedMember]],
             },
-            gold: { $set: state.guild.stats.gold - 5}
-          }
-        }
+            gold: { $set: state.guild.stats.gold - 5 },
+          },
+        },
       });
-    case 'hireGuildMember':   
+    case "hireGuildMember":
       return update(state, {
         guild: {
           stats: {
             members: { $push: [computedAction.payload] },
-            gold: { $set: state.guild.stats.gold - getMemberCost(computedAction.payload) }
-          }
+            gold: {
+              $set:
+                state.guild.stats.gold - getMemberCost(computedAction.payload),
+            },
+          },
         },
         tavern: {
-          recruits: { $splice: [[state.tavern.recruits.indexOf(computedAction.payload), 1]]}
-        }
-      });   
+          recruits: {
+            $splice: [
+              [state.tavern.recruits.indexOf(computedAction.payload), 1],
+            ],
+          },
+        },
+      });
     default:
   }
 
   // City
   switch (computedAction.type) {
-    case 'changeSelectedCityMenu': 
+    case "changeSelectedCityMenu":
       return update(state, {
         city: {
-          selectedItem: { $set: computedAction.payload}
-        }
+          selectedItem: { $set: computedAction.payload },
+        },
       });
     default:
   }
 
+  //#region Members
+  switch (computedAction.type) {
+    case "addMember":
+      return update(state, {
+        tavern: {
+          recruits: { $push: [computedAction.payload] },
+        },
+      });
+    default:
+  }
+  //#endregion
+
   // Quests
   switch (computedAction.type) {
-    case 'addQuest':
+    case "addQuest":
       return update(state, {
-        quests: { quests: {$push: [computedAction.payload] } }
+        quests: { quests: { $push: [computedAction.payload] } },
       });
-    case 'removeQuest': 
+    case "removeQuest":
       return update(state, {
-        quests: {quests: { $splice: [[state.quests.quests.indexOf(computedAction.payload), 1]] }}
+        quests: {
+          quests: {
+            $splice: [[state.quests.quests.indexOf(computedAction.payload), 1]],
+          },
+        },
       });
-    case 'acceptQuest': 
-      acceptQuest(state, computedAction.payload.quest, computedAction.payload.selectedMember);
+    case "acceptQuest":
+      acceptQuest(
+        state,
+        computedAction.payload.quest,
+        computedAction.payload.selectedMember
+      );
 
-      return  update(state, {
-        quests: {quests: { $splice: [[state.quests.quests.indexOf(computedAction.payload.quest), 1, computedAction.payload.quest]] }}
-      });
-    case 'advanceQuest': 
-      advanceQuest(state, computedAction.payload);
-      
       return update(state, {
-        quests: {quests: { $splice: [[state.quests.quests.indexOf(computedAction.payload), 1, computedAction.payload]] }}
+        quests: {
+          quests: {
+            $splice: [
+              [
+                state.quests.quests.indexOf(computedAction.payload.quest),
+                1,
+                computedAction.payload.quest,
+              ],
+            ],
+          },
+        },
       });
-    case 'closeQuest':
+    case "advanceQuest":
+      advanceQuest(state, computedAction.payload);
+
+      return update(state, {
+        quests: {
+          quests: {
+            $splice: [
+              [
+                state.quests.quests.indexOf(computedAction.payload),
+                1,
+                computedAction.payload,
+              ],
+            ],
+          },
+        },
+      });
+    case "closeQuest":
       return update(state, {
         guild: {
           stats: {
-            gold: {$apply: (gold) => gold + computedAction.payload.reward}
-          }
+            gold: { $apply: (gold) => gold + computedAction.payload.reward },
+          },
         },
-        quests: {quests: { $splice: [[state.quests.quests.indexOf(computedAction.payload), 1]] }}
+        quests: {
+          quests: {
+            $splice: [[state.quests.quests.indexOf(computedAction.payload), 1]],
+          },
+        },
       });
     default:
   }
@@ -126,7 +184,6 @@ export default function reducer(state, action) {
   console.log("returning Default");
   return state;
 }
-
 
 /*Available Commands
 {$push: array} push() all the items in array on the target.

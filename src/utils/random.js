@@ -1,5 +1,5 @@
-import { maleNames, femaleNames, surnames } from './names';
-import { SEXES } from './consts';
+import { maleNames, femaleNames, surnames } from "./names";
+import { SEXES } from "./consts";
 
 export function getRandomNumber(min, max) {
   return Math.random() * (max - min) + min;
@@ -10,32 +10,48 @@ export function getRandomInt(min, max) {
 }
 
 export function getRandomColor() {
-  return `#${Math.floor(Math.random()*16777215).toString(16)}`;
+  return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 }
 
 /*
-* Gets a random int from 1 to the number passed
-*/
+ * Gets a random int from 1 to the number passed
+ */
 export function roll(max) {
- return getRandomInt(0, max);
+  return getRandomInt(0, max);
 }
 
 /*
  * Returns true or false based in a % probability
-*/
+ */
 export function isHappening(prob) {
-	return getRandomInt(0, 100) <= prob;
+  return getRandomInt(0, 100) <= prob;
 }
 
 export function getRandomName(sex = SEXES.MALE) {
-	if (sex == SEXES.MALE) {
-		return maleNames[getRandomInt(0,maleNames.length-1)];
-	} else if (sex == SEXES.FEMALE) {
-		return femaleNames[getRandomInt(0,femaleNames.length-1)];
-	}
-	return 'Bernt'; 
+  if (sex == SEXES.MALE) {
+    return maleNames[getRandomInt(0, maleNames.length - 1)];
+  } else if (sex == SEXES.FEMALE) {
+    return femaleNames[getRandomInt(0, femaleNames.length - 1)];
+  }
+  return "Bernt";
 }
 
 export function getRandomSurname() {
-	return surnames[getRandomInt(0,surnames.length-1)];
+  return surnames[getRandomInt(0, surnames.length - 1)];
+}
+
+/*
+ * Returns a random property of an object
+ */
+export function getRandomValue(obj) {
+  const keys = Object.keys(obj);
+  return obj[keys[(keys.length * Math.random()) << 0]];
+}
+
+/*
+ * Returns a random key from an object
+ */
+export function getRandomKey(obj) {
+  const keys = Object.keys(obj);
+  return keys[(keys.length * Math.random()) << 0];
 }

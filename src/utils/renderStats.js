@@ -1,15 +1,15 @@
-import { Typography } from 'antd';
+import { Typography } from "antd";
 
 export function getStatColor(stat, computedStat) {
   if (computedStat > stat) {
-    return 'success';
+    return "success";
   }
 
   if (computedStat < stat) {
-    return 'danger';
+    return "danger";
   }
 
-  return 'default';
+  return "default";
 }
 
 export default function renderStats(member) {
@@ -17,22 +17,32 @@ export default function renderStats(member) {
     const stat = member.stats[statName];
     const computedStat = member.computedStats[statName];
 
-    return <Typography.Text key={statName} type={getStatColor(stat, computedStat)}>{statName}: {computedStat}</Typography.Text>
+    return (
+      <Typography.Text key={statName} type={getStatColor(stat, computedStat)}>
+        {statName}: {computedStat}
+      </Typography.Text>
+    );
   });
 }
 
 export function sumStats(member) {
-  return Object.keys(member.stats).reduce((acc, statName) => {
-    const stat = member.stats[statName];
+  return (
+    Object.keys(member.stats).reduce((acc, statName) => {
+      const stat = member.stats[statName];
 
-    return acc + stat;
-  }, 0) - member.stats.health;
+      return acc + stat;
+    }, 0) - member.stats.health
+  );
 }
 
 export function renderData(member) {
   return Object.keys(member.data).map((statName) => {
     const data = member.data[statName];
 
-    return <Typography.Text key={statName} >{statName}: {data}</Typography.Text>
+    return (
+      <Typography.Text key={statName}>
+        {statName}: {data}
+      </Typography.Text>
+    );
   });
 }
