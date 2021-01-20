@@ -1,10 +1,14 @@
-import CityBuilding from '../city-building';
+import CityBuilding from "../city-building";
 
-import Overview from './overview';
-import Recruits from './recruits';
-import Quests from './quests';
+import Overview from "./overview";
+import Recruits from "./recruits";
+import Quests from "./quests";
 
-export default function Tavern() {  
-  
-  return <CityBuilding menuItems={[Overview, Recruits, Quests]} stateNamespace="tavern" />
+export default function Tavern() {
+  return (
+    <CityBuilding
+      menuItems={[Overview, Recruits, Quests]}
+      stateNamespace="tavern"
+    />
+  );
 }

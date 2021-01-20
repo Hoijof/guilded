@@ -1,9 +1,11 @@
-import { TIME_OF_THE_DAY, MONTHS } from '../consts';
-
-
+import { TIME_OF_THE_DAY, MONTHS } from "../consts";
 
 export function isToday(ticker, date) {
-  return ticker.year === date[0] && ticker.month === date[1] && ticker.day === date[2];
+  return (
+    ticker.year === date[0] &&
+    ticker.month === date[1] &&
+    ticker.day === date[2]
+  );
 }
 
 export function getTimeInFuture(startTime, difference) {
@@ -41,12 +43,16 @@ export function getTotalHours(time) {
 }
 
 export function getTimeFromHours(hours) {
-  return [Math.floor(hours / 1440), Math.floor((hours / 360) % 4), Math.floor((hours / 24) % 15) + 1, hours % 24];
+  return [
+    Math.floor(hours / 1440),
+    Math.floor((hours / 360) % 4),
+    Math.floor((hours / 24) % 15) + 1,
+    hours % 24,
+  ];
 }
 
-
 export function getNextTime(currentStage) {
-  switch(currentStage) {
+  switch (currentStage) {
     case TIME_OF_THE_DAY.MORNING:
       return TIME_OF_THE_DAY.AFTERNOON;
     case TIME_OF_THE_DAY.AFTERNOON:

@@ -1,24 +1,30 @@
-import React, { useContext } from 'react';
-import { AppContext } from '../world';
-import { Menu } from 'antd';
+import React, { useContext } from "react";
+import { AppContext } from "../world";
+import { Menu } from "antd";
 
-export default function CityMenu({defaultItem, menuItems, stateNamespace}) {
+export default function CityMenu({ defaultItem, menuItems, stateNamespace }) {
   const { dispatch } = useContext(AppContext);
 
   function changeMenuItem({ key }) {
     dispatch({
-      type: 'changeSelectedContentMenu',
+      type: "changeSelectedContentMenu",
       payload: {
         key,
-        stateNamespace
-      }
+        stateNamespace,
+      },
     });
   }
-  
+
   return (
-  <Menu onSelect={changeMenuItem} theme="light" mode="horizontal" defaultSelectedKeys={[defaultItem]} >
-    {menuItems.map(Item => <Menu.Item key={Item.displayName}>{Item.displayName}</Menu.Item>)}
-  </Menu>
+    <Menu
+      onSelect={changeMenuItem}
+      theme="light"
+      mode="horizontal"
+      defaultSelectedKeys={[defaultItem]}
+    >
+      {menuItems.map((Item) => (
+        <Menu.Item key={Item.displayName}>{Item.displayName}</Menu.Item>
+      ))}
+    </Menu>
   );
 }
-

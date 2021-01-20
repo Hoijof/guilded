@@ -1,10 +1,16 @@
-import { SEXES, LOCATIONS, MAX_ENERGY_RECOVERY_TIME } from '../consts';
-import {getRandomInt, getRandomNumber ,getRandomColor, getRandomName, getRandomSurname} from '../random';
+import { SEXES, LOCATIONS, MAX_ENERGY_RECOVERY_TIME } from "../consts";
+import {
+  getRandomInt,
+  getRandomNumber,
+  getRandomColor,
+  getRandomName,
+  getRandomSurname,
+} from "../random";
 
 let id = 0;
 
 function getRandomType() {
-  return Math.random() > 0.5 ? 'warrior' : 'mage';
+  return Math.random() > 0.5 ? "warrior" : "mage";
 }
 
 function getRandomStats() {
@@ -14,34 +20,38 @@ function getRandomStats() {
     strength: getRandomInt(1, 3),
     willpower: getRandomInt(1, 3),
     endurance: getRandomInt(1, 3),
-    agility: getRandomInt(1, 3)
-  }
+    agility: getRandomInt(1, 3),
+  };
 }
 
 function getInitialData() {
   return {
     missions: 0,
     yearsInGuild: 0,
-  }
+  };
 }
 
 export function getMemberCost(member) {
   const statsCost = Object.values(member.stats).reduce((total, stat) => {
     return total + stat;
   }, 0);
-  
-  return ((member.level * 5) + statsCost);
+
+  return member.level * 5 + statsCost;
 }
 
 export function createMember(
-  name, sex = SEXES[getRandomInt(0,1)], surname = getRandomSurname(), 
-  color = getRandomColor(), type = getRandomType(), stats = getRandomStats(),
-  data = getInitialData()) {
-
+  name,
+  sex = SEXES[getRandomInt(0, 1)],
+  surname = getRandomSurname(),
+  color = getRandomColor(),
+  type = getRandomType(),
+  stats = getRandomStats(),
+  data = getInitialData()
+) {
   return {
     id: id++,
     sex,
-    name: name ? name :  getRandomName(sex),
+    name: name ? name : getRandomName(sex),
     surname,
     color,
     items: [],
@@ -52,9 +62,9 @@ export function createMember(
     task: null,
     location: LOCATIONS.GUILD,
     stats,
-    computedStats: {...stats},
-    data
-  } 
+    computedStats: { ...stats },
+    data,
+  };
 }
 
 export function getMemberFullName(member) {
@@ -62,7 +72,7 @@ export function getMemberFullName(member) {
 }
 
 export function getMemberTravelCapacity(member) {
-  const {energy, endurance, agility } = member.computedStats;
+  const { energy, endurance, agility } = member.computedStats;
 
   return energy === 0 ? 0 : Math.floor((energy + endurance + agility) / 2);
 }
@@ -70,7 +80,8 @@ export function getMemberTravelCapacity(member) {
 export function consumeTravelCapacity(member, travelCapacity) {
   const maxTravelCapacity = getMemberTravelCapacity(member);
 
-  const energyToConsume = -(member.computedStats.energy * travelCapacity) / maxTravelCapacity;
+  const energyToConsume =
+    -(member.computedStats.energy * travelCapacity) / maxTravelCapacity;
 
   modifyEnergy(member, energyToConsume);
 }
@@ -89,13 +100,15 @@ export function getMemberRestTime(member) {
   const { energy } = member.stats;
   const { energy: computedEnergy } = member.computedStats;
 
-  return Math.ceil((energy - computedEnergy) / (energy / MAX_ENERGY_RECOVERY_TIME));
+  return Math.ceil(
+    (energy - computedEnergy) / (energy / MAX_ENERGY_RECOVERY_TIME)
+  );
 }
 
 export function restMemberFor(member, hours) {
   const { energy } = member.stats;
-  
-  const recoveryRation = (energy / MAX_ENERGY_RECOVERY_TIME);
+
+  const recoveryRation = energy / MAX_ENERGY_RECOVERY_TIME;
 
   modifyEnergy(member, recoveryRation * hours);
 }

@@ -8,38 +8,33 @@ export const GUILD_QUEST_DEPARTURE_TIME = 6;
 export const MEMBERS_ARRIVAL_TIME = 10;
 
 export const TIME_OF_THE_DAY = {
-  MORNING: 'Morning',
-  AFTERNOON: 'Afternoon',
-  EVENING: 'Evening',
-  NIGHT: 'Night'
+  MORNING: "Morning",
+  AFTERNOON: "Afternoon",
+  EVENING: "Evening",
+  NIGHT: "Night",
 };
 
-export const MONTHS = [
-  'Decembary',
-  'Aprimay',
-  'Jugust',
-  'Septober'
-];
+export const MONTHS = ["Decembary", "Aprimay", "Jugust", "Septober"];
 
 export const EVENT_TYPES = {
-  QUEST: 'QUEST',
-  EVENT: 'EVENT'
+  QUEST: "QUEST",
+  EVENT: "EVENT",
 };
 
 export const QUEST_TYPES = {
-  GO_FETCH: 'Go Fetch'
+  GO_FETCH: "Go Fetch",
 };
 
 export const SEXES = {
-  MALE: 'male',
-  FEMALE: 'female'
+  MALE: "male",
+  FEMALE: "female",
 };
 
 export const LOCATIONS = {
-  GUILD: 'Guild',
-  TRAVELING: 'Traveling',
-  CITY: 'City',
-  CAMP: 'Camp'
+  GUILD: "Guild",
+  TRAVELING: "Traveling",
+  CITY: "City",
+  CAMP: "Camp",
 };
 
 export const MAX_ENERGY_RECOVERY_TIME = 4;

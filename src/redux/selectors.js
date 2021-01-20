@@ -25,12 +25,11 @@ export function getQuests(state) {
 }
 
 export function getAcceptedQuests(state) {
-  return getQuests(state).filter(quest => quest.accepted);
+  return getQuests(state).filter((quest) => quest.accepted);
 }
 
 export function getAcceptedAndNotDepartedQuests(state) {
-  return getAcceptedQuests(state).filter(quest => !quest.startedAt);
+  return getAcceptedQuests(state).filter((quest) => !quest.startedAt);
 }
 
 //#endregion
-
