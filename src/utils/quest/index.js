@@ -2,6 +2,7 @@ import { getTicker } from "../../redux/selectors";
 import { getRandomInt } from "../random";
 import { LOCATIONS } from "../consts";
 import { getCurrentTime, getTimeInFuture } from "../ticker/tickerUtils";
+import { addExperienceToMember } from "../members";
 
 // Quest types
 import generateStepsFetch from "./fetch";
@@ -50,10 +51,10 @@ export default function createQuest(state) {
 
 function addRandomQuestData(quest) {
   // Value in hours
-  const questValue = getRandomInt(2, 8);
+  const questValue = getRandomInt(4, 12);
 
   quest.name = "Go Fetch";
-  quest.level = questValue.map(2, 8, 1, 5);
+  quest.level = questValue.map(4, 12, 1, 5);
   quest.description = "Go find something somewhere";
   quest.reward = Math.round(questValue * 2 + getRandomInt(-3, 4));
   quest.steps = generateStepsFetch(quest, questValue);
@@ -97,5 +98,13 @@ function completeQuest(state, quest) {
   quest.assignee.task = null;
   quest.assignee.location = LOCATIONS.GUILD;
 
-  addLog(state, quest, "Quest completed");
+  addExperienceToMember(quest.assignee, quest.level);
+
+  addLog(
+    state,
+    quest,
+    `Quest completed. Members gained ${Math.round(
+      quest.level
+    )} experience points.`
+  );
 }

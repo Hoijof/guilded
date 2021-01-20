@@ -39,3 +39,19 @@ export function getRandomName(sex = SEXES.MALE) {
 export function getRandomSurname() {
   return surnames[getRandomInt(0, surnames.length - 1)];
 }
+
+/*
+ * Returns a random property of an object
+ */
+export function getRandomValue(obj) {
+  const keys = Object.keys(obj);
+  return obj[keys[(keys.length * Math.random()) << 0]];
+}
+
+/*
+ * Returns a random key from an object
+ */
+export function getRandomKey(obj) {
+  const keys = Object.keys(obj);
+  return keys[(keys.length * Math.random()) << 0];
+}

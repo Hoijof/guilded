@@ -5,6 +5,8 @@ import { Card, Typography, Space, Collapse } from "antd";
 import renderStats, { sumStats, renderData } from "../../utils/renderStats";
 import { cardStyle } from "../../utils/styles";
 
+import { canLevelUp, getLevelUpExperience, levelUp } from "../../utils/members";
+
 const { Text } = Typography;
 const { Panel } = Collapse;
 
@@ -38,8 +40,16 @@ export default function Members() {
                 </Text>
               </Text>
               <Text>
-                Level: {member.level} ({member.exp} / {member.level * 2}){" "}
-                {member.exp > member.level * 2 ? "▲" : null}
+                Level: {member.level} ({member.exp} /{" "}
+                {getLevelUpExperience(member)}){" "}
+                {canLevelUp(member) ? (
+                  <span
+                    style={{ cursor: "pointer" }}
+                    onClick={() => levelUp(member)}
+                  >
+                    ▲
+                  </span>
+                ) : null}
               </Text>
               <Text>Type: {member.type}</Text>
               <Text>Location: {member.location}</Text>

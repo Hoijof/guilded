@@ -5,6 +5,7 @@ import {
   getRandomColor,
   getRandomName,
   getRandomSurname,
+  getRandomKey,
 } from "../random";
 
 let id = 0;
@@ -72,16 +73,20 @@ export function getMemberFullName(member) {
 }
 
 export function getMemberTravelCapacity(member) {
-  const { energy, endurance, agility } = member.computedStats;
+  const { energy } = member.computedStats;
 
-  return energy === 0 ? 0 : Math.floor((energy + endurance + agility) / 2);
+  return energy === 0 ? 0 : Math.floor(energy * getTravelRatio(member));
 }
 
-export function consumeTravelCapacity(member, travelCapacity) {
-  const maxTravelCapacity = getMemberTravelCapacity(member);
+export function getTravelRatio(member) {
+  const { endurance, agility } = member.computedStats;
+  return (endurance + agility).map(0, 20, 0.5, 3);
+}
 
-  const energyToConsume =
-    -(member.computedStats.energy * travelCapacity) / maxTravelCapacity;
+export function consumeTravelCapacity(member, timeTraveling) {
+  const travelRatio = getTravelRatio(member);
+
+  const energyToConsume = -timeTraveling / travelRatio;
 
   modifyEnergy(member, energyToConsume);
 }
@@ -108,7 +113,39 @@ export function getMemberRestTime(member) {
 export function restMemberFor(member, hours) {
   const { energy } = member.stats;
 
-  const recoveryRation = energy / MAX_ENERGY_RECOVERY_TIME;
+  const recoveryRatio = energy / MAX_ENERGY_RECOVERY_TIME;
 
-  modifyEnergy(member, recoveryRation * hours);
+  modifyEnergy(member, recoveryRatio * hours);
+}
+
+export function addExperienceToMember(member, experience) {
+  member.exp += Math.round(experience);
+}
+
+export function canLevelUp(member) {
+  return member.exp > getLevelUpExperience(member);
+}
+
+export function getLevelUpExperience(member) {
+  return member.level * 2;
+}
+
+export function levelUp(member) {
+  member.exp = member.exp - getLevelUpExperience(member);
+  member.level++;
+
+  const attributesToUpdate = getRandomInt(1, 3);
+
+  for (let i = 0; i < attributesToUpdate; i++) {
+    member.stats[getRandomKey(member.stats)]++;
+
+    computeStats(member);
+  }
+}
+
+export function computeStats(member) {
+  const oldEnergy = member.computedStats.energy;
+
+  member.computedStats = { ...member.stats };
+  member.computedStats.energy = oldEnergy;
 }
