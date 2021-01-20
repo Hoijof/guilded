@@ -8,9 +8,8 @@ import { getNamespacedDefaultMenu } from '../../redux/selectors';
 const { Header, Content } = Layout;
 
 function renderContent(dispatch, state, menuItems, stateNamespace) {
-  debugger;
   const Content = menuItems.find((Item) => {
-    return Item.name === state[stateNamespace].selectedItem;
+    return Item.displayName === state[stateNamespace].selectedItem;
   });
 
   return Content ? <Content /> : "error";
