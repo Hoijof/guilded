@@ -1,5 +1,5 @@
-import { SEXES, LOCATIONS, MAX_ENERGY_RECOVERY_TIME } from './consts';
-import {getRandomInt, getRandomNumber ,getRandomColor, getRandomName, getRandomSurname} from './random';
+import { SEXES, LOCATIONS, MAX_ENERGY_RECOVERY_TIME } from '../consts';
+import {getRandomInt, getRandomNumber ,getRandomColor, getRandomName, getRandomSurname} from '../random';
 
 let id = 0;
 

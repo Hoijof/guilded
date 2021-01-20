@@ -34,7 +34,7 @@ export default function World() {
     },
     tavern: {
       selectedItem: 'Overview',
-      recruits: [1,2,3,4].map(() => createMember())
+      recruits: []
     },
     quests: {
       quests: [],

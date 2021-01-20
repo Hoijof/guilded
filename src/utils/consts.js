@@ -5,6 +5,7 @@ export const MONTH_LENGTH = 15;
 
 export const QUEST_ARRIVAL_TIME = 12;
 export const GUILD_QUEST_DEPARTURE_TIME = 6;
+export const MEMBERS_ARRIVAL_TIME = 10;
 
 export const TIME_OF_THE_DAY = {
   MORNING: 'Morning',

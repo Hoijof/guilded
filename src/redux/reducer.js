@@ -89,6 +89,18 @@ export default function reducer(state, action) {
     default:
   }
 
+  //#region Members
+  switch (computedAction.type) {
+    case 'addMember':
+      return update(state, {
+        tavern: {
+          recruits: { $push: [computedAction.payload] }
+        }
+      });
+    default:
+  }
+  //#endregion
+
   // Quests
   switch (computedAction.type) {
     case 'addQuest':
