@@ -5,6 +5,12 @@ import { createQuestEvent } from "../quest/createQuestEvent";
 import { createGuildCheckupEvent } from "../guild/createGuildEvents";
 import { createMembersEvent } from "../members/createMembersEvents";
 
+import {
+  reportsCallADay,
+  reportsCallAMonth,
+  reportsCallAWeek,
+} from "../guild/reports";
+
 import { MONTH_LENGTH, TIME_OF_THE_DAY, EVENT_TYPES } from "../../utils/consts";
 
 let ticker;
@@ -165,6 +171,8 @@ function callADay(dispatch, state) {
   ticker.hour = 0;
   ticker.day++;
 
+  reportsCallADay(state.guild.reports);
+
   if (ticker.day > MONTH_LENGTH) {
     callAMonth(dispatch, state);
   }
@@ -179,6 +187,8 @@ function callAMonth(dispatch, state) {
 
   ticker.day = 1;
   ticker.month++;
+
+  reportsCallAMonth(state.guild.reports);
 
   if (ticker.month === 4) {
     callAYear(dispatch, state);

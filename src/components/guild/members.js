@@ -45,7 +45,9 @@ export default function Members() {
                 {canLevelUp(member) ? (
                   <span
                     style={{ cursor: "pointer" }}
-                    onClick={() => levelUp(member)}
+                    onClick={() => {
+                      dispatch({ type: "levelUpMember", payload: member });
+                    }}
                   >
                     ▲
                   </span>
