@@ -2,7 +2,8 @@
 import update from "immutability-helper";
 
 import { acceptQuest, advanceQuest } from "../utils/quest";
-import { getMemberCost } from "../utils/members";
+import { getMemberCost, levelUp } from "../utils/members";
+import { addQuestReport } from "../utils/guild/reports";
 
 export default function reducer(state, action) {
   const computedAction = typeof action === "string" ? { type: action } : action;
@@ -89,6 +90,24 @@ export default function reducer(state, action) {
           },
         },
       });
+    case "levelUpMember":
+      levelUp(computedAction.payload);
+
+      return update(state, {
+        guild: {
+          stats: {
+            members: {
+              $splice: [
+                [
+                  state.tavern.recruits.indexOf(computedAction.payload),
+                  1,
+                  computedAction.payload,
+                ],
+              ],
+            },
+          },
+        },
+      });
     default:
   }
 
@@ -166,11 +185,14 @@ export default function reducer(state, action) {
         },
       });
     case "closeQuest":
+      addQuestReport(state.guild.reports, computedAction.payload);
+
       return update(state, {
         guild: {
           stats: {
             gold: { $apply: (gold) => gold + computedAction.payload.reward },
           },
+          reports: { $set: state.guild.reports },
         },
         quests: {
           quests: {

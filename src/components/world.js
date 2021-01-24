@@ -12,6 +12,8 @@ import { createMember } from "../utils/members";
 
 import { INIT_STAGE_SPEED } from "../utils/consts";
 
+import { initializeReports } from "../utils/guild/reports";
+
 export const AppContext = React.createContext();
 
 export default function World() {
@@ -28,6 +30,7 @@ export default function World() {
       },
       logs: [],
       selectedItem: "Overview",
+      reports: initializeReports(),
     },
     city: {
       selectedItem: "Overview",
