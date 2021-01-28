@@ -69,7 +69,7 @@ export default function PhaserTest() {
     function hitBomb(player, bomb) {
       this.physics.pause();
 
-      player.setTint(0xff0000);
+      player.setTint(0xffffff);
 
       player.anims.play("turn");
 

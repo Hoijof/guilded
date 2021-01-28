@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 
 export const defaultConfig = {
-  type: Phaser.CANVAS,
+  type: Phaser.WEBGL,
   width: 800,
   height: 600,
   physics: {
